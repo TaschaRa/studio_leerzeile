@@ -1,29 +1,52 @@
-/* studio.leerzeile – Shop: Katalog, Warenkorb und Darstellung
-   Datenquelle: data/shopdaten.js (window.STUDIO_CATALOG). Führend ist daten/import/produkte.json;
-   shopdaten.js ist daraus abgeleitet und wird hier nur gelesen, nie verändert.
-   Der Warenkorb liegt nur in diesem Browser (localStorage) – Demo, keine Bestellung, keine Zahlung.
+/* studio.leerzeile – Shop: Warenkorb, Produktseiten, Startseite und Kategorieseiten
+   - Warenkorb (warenkorb.html) und Produktseiten (produkte/*.html) brauchen KEIN shopdaten.js:
+     Die Produktseiten liefern Name, Farbe, SKU, Preis in Cent, Bestand und Seitenname als data-Attribute;
+     der Warenkorb speichert diese Angaben mit jedem Artikel.
+   - Startseite und Kategorieseiten lesen weiter data/shopdaten.js (window.STUDIO_CATALOG).
+   - Der Warenkorb liegt nur in diesem Browser (localStorage) – Demo, keine Bestellung, keine Zahlung.
    Funktioniert auch beim direkten Öffnen der Datei (file:///), weil nichts per fetch() geladen wird. */
 (function () {
   'use strict';
 
-  var KATALOG = window.STUDIO_CATALOG;
-  if (!KATALOG || !KATALOG.products) return;
+  var KATALOG = window.STUDIO_CATALOG || null;   /* nur auf Startseite und Kategorieseiten geladen */
 
   var SPEICHER_SCHLUESSEL = 'studio-leerzeile-warenkorb';
-  var MWST_SATZ = KATALOG.vat_rate || 0.19;
+  var MAX_MENGE = 10;   /* höchstens 10 Stück je Artikel (und nie mehr als der Demo-Bestand) */
 
-  /* Versand (Demo-Angaben aus dem Katalog: shop_policies_demo): 4,90 €, ab 50 € Warenwert versandkostenfrei */
-  var REGELN = KATALOG.shop_policies_demo || {};
-  var VERSAND_PREIS = typeof REGELN.shipping_price_eur === 'number' ? REGELN.shipping_price_eur : 4.9;
-  var VERSANDFREI_AB = typeof REGELN.free_shipping_from_eur === 'number' ? REGELN.free_shipping_from_eur : 50;
+  /* Feste Demo-Regeln (gleich wie shop_policies_demo in daten/import/produkte.json).
+     Ändern sie sich dort, hier von Hand nachziehen – der Warenkorb lädt den Katalog nicht mehr. */
+  var MWST_SATZ = 0.19;
+  var VERSAND_CENT = 490;           /* 4,90 € */
+  var VERSANDFREI_AB_CENT = 5000;   /* ab 50 € Warenwert versandkostenfrei */
   var LIEFERZEIT = '2–4 Werktage';
-  function versandkosten(warenwert) { return warenwert >= VERSANDFREI_AB ? 0 : VERSAND_PREIS; }
 
-  var BILD_HINWEIS = 'Beispielbild – die abgebildete Farbe kann von der gewählten Variante abweichen.';
+  /* Seiten in website/produkte/ setzen <body data-basis="../">, alle anderen nichts */
+  var BASIS = document.body.getAttribute('data-basis') || '';
 
-  /* Bilder: die zugeschnittenen Dateien, Pfad aus der Artikelnummer abgeleitet
-     (die Pfade "assets/…" in den Daten bleiben unverändert und werden hier nicht benutzt). */
-  function produktBild(id) { return '../Bilder/produkte-zugeschnitten/' + id + '.png'; }
+  /* ---------- Geld: immer in ganzen Cent rechnen ----------
+     Euro-Preise (mit Komma) werden genau einmal in Cent umgewandelt.
+     Erst bei der Anzeige wird wieder in Euro umgerechnet (deutsches Format, z. B. 114,80 €). */
+  function cent(euroBetrag) { return Math.round(euroBetrag * 100); }
+  function versandCent(warenwertCent) { return warenwertCent >= VERSANDFREI_AB_CENT ? 0 : VERSAND_CENT; }
+  /* Brutto ist führend: Netto = Brutto / 1,19 auf ganze Cent gerundet, MwSt. = Brutto – Netto */
+  function mwstCent(bruttoCent) { return bruttoCent - Math.round(bruttoCent / (1 + MWST_SATZ)); }
+
+  var euroFormat = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
+  /* Anzeige: Cent → Euro, z. B. 11480 → "114,80 €" */
+  function euro(betragCent) { return euroFormat.format(betragCent / 100); }
+  /* ganze Euro ohne Nachkommastellen, z. B. 5000 → "50 €" */
+  function euroKurz(betragCent) { return betragCent % 100 === 0 ? (betragCent / 100) + ' €' : euro(betragCent); }
+  function grenze(bestand) { return Math.min(MAX_MENGE, bestand); }
+
+  /* ---------- Pfade ---------- */
+  /* Seitenname aus dem Slug: klein, "-" → "_", z. B. fuellfederhalter-signature → fuellfederhalter_signature.html */
+  function seitenName(slug) { return String(slug).toLowerCase().replace(/-/g, '_') + '.html'; }
+  function produktSeiteLink(seite) { return BASIS + 'produkte/' + seite; }
+  function kategorieLink(id) { return BASIS + 'kategorie.html?id=' + encodeURIComponent(id); }
+  function warenkorbLink() { return BASIS + 'warenkorb.html'; }
+  /* Bild aus der Produktnummer: die zugeschnittenen Dateien */
+  function produktBild(produktId) { return BASIS + '../Bilder/produkte-zugeschnitten/' + produktId + '.png'; }
+  function parameter(name) { return new URLSearchParams(window.location.search).get(name); }
 
   /* 4:3-Ausschnitt je Motiv, damit nichts Wichtiges abgeschnitten wird (siehe css: .ausschnitt-…) */
   var AUSSCHNITT = {
@@ -41,7 +64,7 @@
     'ST-SG-002': 'ausschnitt-unten'
   };
 
-  /* Alternativtexte beschreiben das gezeigte Beispielbild */
+  /* Alternativtexte der Kacheln (Kategorieseiten) beschreiben das gezeigte Beispielbild */
   var ALT = {
     'ST-SCH-001': 'Weißer Füllfederhalter mit goldener Feder in Nahaufnahme',
     'ST-SCH-002': 'Weißer Kugelschreiber mit goldenem Clip und goldener Spitze',
@@ -58,33 +81,8 @@
   };
 
   /* ---------- Hilfsfunktionen ---------- */
-  var euroFormat = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
-  function euro(betrag) { return euroFormat.format(betrag); }
-  /* ganze Beträge ohne Nachkommastellen, z. B. "50 €" */
-  function euroKurz(betrag) { return betrag % 1 === 0 ? betrag + ' €' : euro(betrag); }
-  function runden(x) { return Math.round(x * 100) / 100; }
-  /* Brutto ist führend: Netto = Brutto / 1,19 (gerundet), MwSt. = Brutto – Netto */
-  function nettoAus(brutto) { return runden(brutto / (1 + MWST_SATZ)); }
-
-  function produktLink(id) { return 'produkt.html?id=' + encodeURIComponent(id); }
-  function kategorieLink(id) { return 'kategorie.html?id=' + encodeURIComponent(id); }
-  function parameter(name) { return new URLSearchParams(window.location.search).get(name); }
-
   function finde(liste, feld, wert) {
     for (var i = 0; i < liste.length; i++) if (liste[i][feld] === wert) return liste[i];
-    return null;
-  }
-  function kategorie(id) { return finde(KATALOG.categories, 'id', id); }
-  function produkt(id) { var p = finde(KATALOG.products, 'id', id); return p && p.active ? p : null; }
-  function produkteVon(katId) {
-    return KATALOG.products.filter(function (p) { return p.active && p.category_id === katId; });
-  }
-  function variante(sku) {
-    for (var i = 0; i < KATALOG.products.length; i++) {
-      var p = KATALOG.products[i];
-      var v = finde(p.variants, 'sku', sku);
-      if (v && p.active) return { produkt: p, variante: v };
-    }
     return null;
   }
 
@@ -104,72 +102,123 @@
     return e;
   }
 
-  function bildRahmen(id, alt) {
+  function bildRahmen(produktId, alt) {
     return el('div', { class: 'kachelbild-rahmen' }, [
       el('img', {
-        class: 'kachelbild ' + (AUSSCHNITT[id] || 'ausschnitt-mitte'),
-        src: produktBild(id), alt: alt === undefined ? (ALT[id] || '') : alt, loading: 'lazy'
+        class: 'kachelbild ' + (AUSSCHNITT[produktId] || 'ausschnitt-mitte'),
+        src: produktBild(produktId), alt: alt === undefined ? (ALT[produktId] || '') : alt, loading: 'lazy'
       })
     ]);
   }
 
   function stueck(n) { return n === 1 ? '1 Produkt' : n + ' Produkte'; }
 
-  /* ---------- Warenkorb (Speicher) ----------
-     Pro Position: Varianten-SKU, Produkt, Farbe, Bruttopreis, Menge. */
-  function warenkorbLesen() {
-    try {
-      var daten = JSON.parse(window.localStorage.getItem(SPEICHER_SCHLUESSEL) || '[]');
-      if (!Array.isArray(daten)) return [];
-      return daten.filter(function (pos) {
-        return pos && variante(pos.sku) && pos.menge > 0;
-      });
-    } catch (e) {
-      return [];
-    }
+  /* ---------- Artikel prüfen ----------
+     artikel = { sku, produkt_id, name, farbe, preis_cent, bestand, seite }
+     Ungültige Angaben → null (der Artikel wird nicht angenommen, kein Fehler). */
+  function text(wert, maxLaenge) {
+    return typeof wert === 'string' && wert.trim() !== '' && wert.length <= maxLaenge ? wert : null;
+  }
+  function ganzeZahl(wert) {
+    var n = typeof wert === 'string' && wert.trim() !== '' ? Number(wert) : wert;
+    return typeof n === 'number' && Number.isInteger(n) ? n : null;
+  }
+  function gueltigerArtikel(a) {
+    if (!a || typeof a !== 'object') return null;
+    var sku = text(a.sku, 40);
+    var produktId = text(a.produkt_id, 40);
+    var name = text(a.name, 160);
+    var farbe = text(a.farbe, 60);
+    var seite = text(a.seite, 120);
+    var preisCent = ganzeZahl(a.preis_cent);
+    var bestand = ganzeZahl(a.bestand);
+    if (!sku || !/^[A-Z0-9-]+$/.test(sku)) return null;
+    if (!produktId || !/^[A-Z0-9-]+$/.test(produktId) || sku.indexOf(produktId + '-') !== 0) return null;
+    if (!name || !farbe) return null;
+    if (!seite || !/^[a-z0-9_]+\.html$/.test(seite)) return null;           /* klein, Unterstrich, .html */
+    if (preisCent === null || preisCent <= 0 || preisCent > 10000000) return null;
+    if (bestand === null || bestand < 0 || bestand > 100000) return null;
+    return { sku: sku, produkt_id: produktId, name: name, farbe: farbe, preis_cent: preisCent, bestand: bestand, seite: seite };
   }
 
-  function warenkorbSpeichern(liste) {
-    try { window.localStorage.setItem(SPEICHER_SCHLUESSEL, JSON.stringify(liste)); } catch (e) { /* z. B. privates Fenster */ }
-    zaehlerAktualisieren(liste);
-  }
-
-  function positionAus(treffer, menge) {
+  /* artikel aus dem Katalog bilden (nur Startseite und Kategorieseiten) */
+  function artikelAusKatalog(p, v) {
     return {
-      sku: treffer.variante.sku,
-      produkt_id: treffer.produkt.id,
-      name: treffer.produkt.name,
-      farbe: treffer.variante.color,
-      preis_brutto: treffer.variante.price_gross_eur,
-      menge: menge
+      sku: v.sku, produkt_id: p.id, name: p.name, farbe: v.color,
+      preis_cent: cent(v.price_gross_eur), bestand: v.stock, seite: seitenName(p.slug)
     };
   }
 
-  /* legt Menge hinzu, höchstens bis zum (Demo-)Lagerbestand */
-  function hinzufuegen(sku, menge) {
-    var t = variante(sku);
-    if (!t) return null;
+  /* ---------- Warenkorb (Speicher) ----------
+     Nur Artikel, keine Personendaten. Pro Position: sku, produkt_id, name, farbe, preis_cent, bestand, seite, menge.
+     Der Speichereintrag entsteht erst beim ersten Hinzufügen und wird gelöscht, sobald der Warenkorb leer ist. */
+  function warenkorbLesen() {
+    var daten;
+    try {
+      daten = JSON.parse(window.localStorage.getItem(SPEICHER_SCHLUESSEL) || '[]');
+    } catch (e) {
+      return [];   /* unlesbarer Eintrag: verwerfen, kein Fehler */
+    }
+    if (!Array.isArray(daten)) return [];
+    var liste = [];
+    daten.forEach(function (eintrag) {
+      /* Einträge ohne vollständige Angaben (z. B. ältere Formate ohne bestand oder seite) werden verworfen */
+      var a = gueltigerArtikel(eintrag);
+      var menge = eintrag ? Math.floor(+eintrag.menge) : 0;
+      if (!a || !(menge > 0) || finde(liste, 'sku', a.sku)) return;
+      a.menge = Math.min(menge, grenze(a.bestand));
+      if (a.menge > 0) liste.push(a);
+    });
+    return liste;
+  }
+
+  function warenkorbSpeichern(liste) {
+    try {
+      if (liste.length) window.localStorage.setItem(SPEICHER_SCHLUESSEL, JSON.stringify(liste));
+      else window.localStorage.removeItem(SPEICHER_SCHLUESSEL);   /* leer: Eintrag ganz löschen */
+    } catch (e) { /* z. B. Speicher gesperrt */ }
+    zaehlerAktualisieren(liste);
+  }
+
+  /* legt Menge hinzu, höchstens 10 Stück je Artikel und nie mehr als der (Demo-)Lagerbestand.
+     artikel = { sku, produkt_id, name, farbe, preis_cent, bestand, seite } */
+  function hinzufuegen(artikel, menge) {
+    var a = gueltigerArtikel(artikel);
+    if (!a) return null;
     var liste = warenkorbLesen();
-    var pos = finde(liste, 'sku', sku);
+    var pos = finde(liste, 'sku', a.sku);
     var vorher = pos ? pos.menge : 0;
-    var neu = Math.min(vorher + menge, t.variante.stock);
-    if (neu > 0) {
-      if (pos) { pos.menge = neu; pos.preis_brutto = t.variante.price_gross_eur; }
-      else liste.push(positionAus(t, neu));
+    var max = grenze(a.bestand);
+    var neu = Math.min(vorher + menge, max);
+    if (pos) {
+      /* zuletzt übergebene Angaben übernehmen (Name, Farbe, Preis, Bestand, Seite) */
+      Object.keys(a).forEach(function (k) { pos[k] = a[k]; });
+      pos.menge = neu;
+      if (neu < 1) liste = liste.filter(function (x) { return x !== pos; });   /* Bestand 0: Artikel raus */
+      warenkorbSpeichern(liste);
+    } else if (neu > 0) {
+      a.menge = neu;
+      liste.push(a);
       warenkorbSpeichern(liste);
     }
-    return { gewuenscht: menge, hinzu: neu - vorher, menge: neu, bestand: t.variante.stock, farbe: t.variante.color };
+    return { gewuenscht: menge, hinzu: Math.max(0, neu - vorher), menge: neu, max: max, bestand: a.bestand, farbe: a.farbe };
   }
 
   function mengeSetzen(sku, menge) {
-    var t = variante(sku);
     var liste = warenkorbLesen();
     var pos = finde(liste, 'sku', sku);
-    if (!t || !pos) return 0;
-    var neu = Math.max(1, Math.min(Math.floor(menge) || 1, t.variante.stock));
+    if (!pos) return 0;
+    var neu = Math.max(1, Math.min(Math.floor(menge) || 1, grenze(pos.bestand)));
     pos.menge = neu;
     warenkorbSpeichern(liste);
     return neu;
+  }
+
+  /* Grund für eine Mengenbegrenzung, als verständlicher Satz */
+  function grenzText(max, bestand, farbe) {
+    return max < bestand
+      ? 'Höchstens ' + MAX_MENGE + ' Stück je Artikel'
+      : 'Nur ' + bestand + ' Stück in ' + farbe + ' auf Lager';
   }
 
   function entfernen(sku) {
@@ -188,41 +237,54 @@
   /* Rückmeldung nach "In den Warenkorb" (role="status": wird vorgelesen) */
   function rueckmeldung(ziel, ergebnis) {
     ziel.textContent = '';
-    if (!ergebnis) return;
-    if (ergebnis.hinzu === 0) {
-      ziel.textContent = 'Mehr ist in ' + ergebnis.farbe + ' nicht auf Lager (' + ergebnis.bestand + ' Stück).';
+    if (!ergebnis) {
+      ziel.textContent = 'Dieser Artikel konnte nicht in den Warenkorb gelegt werden.';
       return;
     }
-    var text = ergebnis.hinzu < ergebnis.gewuenscht
-      ? 'Nur ' + ergebnis.bestand + ' Stück in ' + ergebnis.farbe + ' auf Lager – jetzt ' + ergebnis.menge + ' Stück im Warenkorb. '
+    var grund = grenzText(ergebnis.max, ergebnis.bestand, ergebnis.farbe);
+    if (ergebnis.hinzu === 0) {
+      ziel.appendChild(document.createTextNode(grund + ' – es sind bereits ' + ergebnis.menge + ' Stück im Warenkorb. '));
+      ziel.appendChild(el('a', { href: warenkorbLink(), text: 'Zum Warenkorb' }));
+      return;
+    }
+    var satz = ergebnis.hinzu < ergebnis.gewuenscht
+      ? grund + ' – jetzt ' + ergebnis.menge + ' Stück im Warenkorb. '
       : (ergebnis.hinzu > 1 ? ergebnis.hinzu + ' × ' : '') + ergebnis.farbe + ' in den Warenkorb gelegt. ';
-    ziel.appendChild(document.createTextNode(text));
-    ziel.appendChild(el('a', { href: 'warenkorb.html', text: 'Zum Warenkorb' }));
+    ziel.appendChild(document.createTextNode(satz));
+    ziel.appendChild(el('a', { href: warenkorbLink(), text: 'Zum Warenkorb' }));
   }
 
-  /* ---------- Produktkachel (Kategorieseite) ---------- */
+  /* ---------- Katalogseiten (brauchen data/shopdaten.js) ---------- */
+  function kategorie(id) { return finde(KATALOG.categories, 'id', id); }
+  function produkt(id) { var p = finde(KATALOG.products, 'id', id); return p && p.active ? p : null; }
+  function produkteVon(katId) {
+    return KATALOG.products.filter(function (p) { return p.active && p.category_id === katId; });
+  }
+
+  /* Produktkachel (Kategorieseite) */
   function produktKarte(p) {
     var erste = p.variants[0];
+    var link = produktSeiteLink(seitenName(p.slug));
     var status = el('p', { class: 'kauf-status', role: 'status' });
     var knopf = el('button', { class: 'knopf', type: 'button', text: 'In den Warenkorb' });
-    knopf.addEventListener('click', function () { rueckmeldung(status, hinzufuegen(erste.sku, 1)); });
+    knopf.addEventListener('click', function () { rueckmeldung(status, hinzufuegen(artikelAusKatalog(p, erste), 1)); });
 
     return el('article', { class: 'prod-karte' }, [
-      el('a', { class: 'bild-link', href: produktLink(p.id) }, [bildRahmen(p.id)]),
-      el('h2', { class: 'prod-name' }, [el('a', { href: produktLink(p.id), text: p.name })]),
+      el('a', { class: 'bild-link', href: link }, [bildRahmen(p.id)]),
+      el('h2', { class: 'prod-name' }, [el('a', { href: link, text: p.name })]),
       el('p', { class: 'prod-info', text: p.description_short }),
       el('p', { class: 'prod-farben', text: p.variants.length + ' Farben: ' + p.variants.map(function (v) { return v.color; }).join(', ') }),
-      el('p', { class: 'preis', text: euro(p.price_gross_eur) }),
+      el('p', { class: 'preis', text: euro(cent(p.price_gross_eur)) }),
       el('p', { class: 'preishinweis', text: 'inkl. MwSt., zzgl. Versand' }),
       knopf,
       status
     ]);
   }
 
-  function nichtGefunden(titelEl, textEl, text) {
-    titelEl.textContent = text;
+  function nichtGefunden(titelEl, textEl, meldungText) {
+    titelEl.textContent = meldungText;
     textEl.textContent = '';
-    textEl.appendChild(el('a', { class: 'textlink', href: 'index.html', text: 'Zurück zur Startseite' }));
+    textEl.appendChild(el('a', { class: 'textlink', href: BASIS + 'index.html', text: 'Zurück zur Startseite' }));
   }
 
   function navigationMarkieren(katId) {
@@ -231,7 +293,7 @@
     });
   }
 
-  /* ---------- Startseite: Zahlen, Texte, Preise aus den Daten ---------- */
+  /* Startseite: Zahlen, Texte, Preise aus den Daten */
   function startseite() {
     document.querySelectorAll('[data-kategorie]').forEach(function (karte) {
       var span = karte.querySelector('.kat-anzahl');
@@ -247,148 +309,130 @@
       var knopf = karte.querySelector('button.knopf');
       if (name) name.textContent = p.name;
       if (info) info.textContent = p.description_short;
-      if (preis) preis.textContent = euro(p.price_gross_eur);
+      if (preis) preis.textContent = euro(cent(p.price_gross_eur));
       if (knopf) {
         var status = el('p', { class: 'kauf-status', role: 'status' });
         knopf.insertAdjacentElement('afterend', status);
-        knopf.addEventListener('click', function () { rueckmeldung(status, hinzufuegen(p.variants[0].sku, 1)); });
+        knopf.addEventListener('click', function () { rueckmeldung(status, hinzufuegen(artikelAusKatalog(p, p.variants[0]), 1)); });
       }
     });
   }
 
-  /* ---------- Kategorieseite ---------- */
+  /* Kategorieseite */
   function kategorieSeite() {
     var titel = document.getElementById('seiten-titel');
-    var text = document.getElementById('seiten-text');
+    var textEl = document.getElementById('seiten-text');
     var liste = document.getElementById('produktliste');
     var k = kategorie(parameter('id'));
-    if (!k) { nichtGefunden(titel, text, 'Kategorie nicht gefunden'); return; }
+    if (!k) { nichtGefunden(titel, textEl, 'Kategorie nicht gefunden'); return; }
 
     var produkte = produkteVon(k.id);
     document.title = k.name + ' – studio.leerzeile';
     titel.textContent = k.name;
     /* geschützter Bindestrich (U+2011): kein Zeilenumbruch mitten in "Stifte-Etuis" */
-    text.textContent = k.description.replace(/-/g, '‑') + ' · ' + stueck(produkte.length);
+    textEl.textContent = k.description.replace(/-/g, '‑') + ' · ' + stueck(produkte.length);
     produkte.forEach(function (p) { liste.appendChild(produktKarte(p)); });
     navigationMarkieren(k.id);
   }
 
-  /* ---------- Produktdetailseite ---------- */
+  /* ---------- Produktseiten (website/produkte/*.html, erzeugt aus produkte.json) ----------
+     Alle Angaben kommen aus den data-Attributen der Seite – kein Katalog nötig. */
   function produktSeite() {
-    var ziel = document.getElementById('produkt-detail');
-    var titel = document.getElementById('seiten-titel');
-    var text = document.getElementById('seiten-text');
-    var p = produkt(parameter('id'));
-    if (!p) { nichtGefunden(titel, text, 'Produkt nicht gefunden'); return; }
-    document.getElementById('seitenkopf').remove();
+    var produktEl = document.querySelector('[data-produkt-id]');
+    if (!produktEl) return;
+    var farben = [].slice.call(produktEl.querySelectorAll('input[name="farbe"]'));
+    var farbname = produktEl.querySelector('.farbname');
+    var skuFeld = produktEl.querySelector('.sku');
+    var bestandFeld = produktEl.querySelector('.bestand-text');
+    var menge = produktEl.querySelector('#menge');
+    var knopf = produktEl.querySelector('#in-den-warenkorb');
+    var status = produktEl.querySelector('.kauf-status[role="status"]');
+    if (!farben.length || !menge || !knopf || !status) return;
 
-    var k = kategorie(p.category_id);
-    document.title = p.name + ' – studio.leerzeile';
-    navigationMarkieren(p.category_id);
+    function gewaehlt() { return finde(farben, 'checked', true) || farben[0]; }
 
-    var gewaehlt = finde(p.variants, 'sku', parameter('sku')) || p.variants[0];
+    function artikelDerSeite() {
+      var f = gewaehlt();
+      return {
+        sku: f.getAttribute('data-sku'),
+        produkt_id: produktEl.getAttribute('data-produkt-id'),
+        name: produktEl.getAttribute('data-name'),
+        farbe: f.getAttribute('data-farbe'),
+        preis_cent: produktEl.getAttribute('data-preis-cent'),
+        bestand: f.getAttribute('data-bestand'),
+        seite: produktEl.getAttribute('data-seite')
+      };
+    }
 
-    var skuFeld = el('dd', { class: 'sku' });
-    var bestandFeld = el('dd');
-    var farbname = el('span', { class: 'farbname' });
-    var menge = el('input', { id: 'menge', type: 'number', min: '1', value: '1', inputmode: 'numeric' });
-    var knopf = el('button', { class: 'knopf', type: 'button', text: 'In den Warenkorb' });
-    var status = el('p', { class: 'kauf-status', role: 'status' });
-
-    var farbfelder = el('div', { class: 'farbfelder' });
-    p.variants.forEach(function (v) {
-      var radio = el('input', { type: 'radio', name: 'farbe', value: v.sku, 'aria-label': v.color });
-      if (v === gewaehlt) radio.checked = true;
-      radio.addEventListener('change', function () { varianteZeigen(v); });
-      farbfelder.appendChild(el('label', { class: 'farbfeld', title: v.color }, [
-        radio,
-        el('span', { class: 'farbpunkt', style: '--farbe:' + v.color_hex, 'aria-hidden': 'true' })
-      ]));
-    });
-
-    function varianteZeigen(v) {
-      gewaehlt = v;
-      skuFeld.textContent = v.sku;
-      farbname.textContent = v.color;
-      bestandFeld.textContent = v.stock > 0 ? v.stock + ' Stück auf Lager (Demo-Bestand)' : 'Derzeit nicht auf Lager';
-      menge.max = String(Math.max(1, v.stock));
-      if (+menge.value > v.stock) menge.value = String(Math.max(1, v.stock));
-      knopf.disabled = v.stock < 1;
+    function varianteZeigen() {
+      var f = gewaehlt();
+      var bestand = Number(f.getAttribute('data-bestand'));
+      farbname.textContent = f.getAttribute('data-farbe');
+      skuFeld.textContent = f.getAttribute('data-sku');
+      bestandFeld.textContent = bestand > 0 ? bestand + ' Stück auf Lager (Demo-Bestand)' : 'Derzeit nicht auf Lager';
+      menge.max = String(Math.max(1, grenze(bestand)));
+      if (+menge.value > grenze(bestand)) menge.value = String(Math.max(1, grenze(bestand)));
+      knopf.disabled = bestand < 1;
       status.textContent = '';
     }
 
+    farben.forEach(function (f) { f.addEventListener('change', varianteZeigen); });
     knopf.addEventListener('click', function () {
-      var m = Math.max(1, Math.floor(+menge.value) || 1);   /* Begrenzung auf den Bestand übernimmt hinzufuegen() */
-      rueckmeldung(status, hinzufuegen(gewaehlt.sku, m));
+      var m = Math.max(1, Math.floor(+menge.value) || 1);   /* Begrenzung auf 10 bzw. Bestand übernimmt hinzufuegen() */
+      rueckmeldung(status, hinzufuegen(artikelDerSeite(), m));
       menge.value = '1';
     });
 
-    var bild = el('div', { class: 'produkt-bild' }, [
-      el('div', { class: 'kachelbild-rahmen' }, [
-        el('img', { class: 'kachelbild', src: produktBild(p.id), alt: ALT[p.id] || p.name })
-      ]),
-      el('p', { class: 'bild-hinweis', text: BILD_HINWEIS })
-    ]);
-
-    var info = el('div', { class: 'produkt-info' }, [
-      el('p', { class: 'prod-kategorie' }, [el('a', { href: kategorieLink(k.id), text: k.name })]),
-      el('h1', { text: p.name }),
-      el('p', { class: 'preis', text: euro(p.price_gross_eur) }),
-      el('p', { class: 'preishinweis', text: 'inkl. MwSt., zzgl. Versand' }),
-      el('p', { class: 'produkt-text', text: p.description }),
-      el('fieldset', { class: 'farbwahl' }, [
-        el('legend', null, ['Farbe: ', farbname]),
-        farbfelder
-      ]),
-      el('div', { class: 'kaufzeile' }, [
-        el('div', { class: 'mengenfeld' }, [el('label', { for: 'menge', text: 'Menge' }), menge]),
-        knopf
-      ]),
-      status,
-      el('dl', { class: 'eckdaten' }, [
-        el('dt', { text: 'Artikelnummer' }), skuFeld,
-        el('dt', { text: 'Verfügbarkeit' }), bestandFeld,
-        el('dt', { text: 'Material' }), el('dd', { text: p.material }),
-        el('dt', { text: 'Ausführung' }), el('dd', { text: p.specification })
-      ])
-    ]);
-
-    ziel.appendChild(el('p', { class: 'zurueck-zeile' }, [
-      el('a', { class: 'textlink', href: kategorieLink(k.id), text: '← Zurück zu ' + k.name })
-    ]));
-    ziel.appendChild(el('div', { class: 'produkt-detail' }, [bild, info]));
-    varianteZeigen(gewaehlt);
+    /* ?sku=… (Link aus dem Warenkorb) wählt die passende Farbe vor */
+    var wunsch = parameter('sku');
+    farben.forEach(function (f) { if (wunsch && f.getAttribute('data-sku') === wunsch) f.checked = true; });
+    varianteZeigen();
   }
 
-  /* ---------- Warenkorbseite ---------- */
+  /* ---------- Warenkorbseite (ohne Katalog: alle Angaben stehen im Speicher) ---------- */
+  var warenkorbNeuZeichnen = null;   /* wird gesetzt, wenn die Warenkorbseite aktiv ist (für pageshow) */
+
   function warenkorbSeite() {
     var ziel = document.getElementById('warenkorb-inhalt');
     var status = document.getElementById('warenkorb-status');
     var titel = document.getElementById('seiten-titel');
 
+    function meldung(satz) { status.textContent = satz; }
+
     function summenAktualisieren(bereich) {
       var liste = warenkorbLesen();
-      var warenwert = runden(liste.reduce(function (s, pos) {
-        return s + variante(pos.sku).variante.price_gross_eur * pos.menge;
-      }, 0));
-      var versand = versandkosten(warenwert);
-      var gesamt = runden(warenwert + versand);
-      var netto = nettoAus(gesamt);   /* Versand ist ein Bruttobetrag, die MwSt. gilt für die Gesamtsumme */
+      var warenwert = liste.reduce(function (s, pos) { return s + pos.preis_cent * pos.menge; }, 0);
+      var versand = versandCent(warenwert);
+      var gesamt = warenwert + versand;
       bereich.querySelector('.wk-anzahl').textContent = anzahl(liste) + ' Artikel';
       bereich.querySelector('.wk-warenwert').textContent = euro(warenwert);
       bereich.querySelector('.wk-versand').textContent = versand === 0 ? euro(0) + ' (versandkostenfrei)' : euro(versand);
       bereich.querySelector('.wk-gesamt').textContent = euro(gesamt);
-      bereich.querySelector('.wk-mwst').textContent = euro(runden(gesamt - netto));
+      bereich.querySelector('.wk-mwst').textContent = euro(mwstCent(gesamt));
+    }
+
+    function leerZeigen() {
+      ziel.appendChild(el('p', { class: 'wk-leer', text: 'Ihr Warenkorb ist leer.' }));
+      ziel.appendChild(el('p', { class: 'ende' }, [el('a', { class: 'knopf hell', href: 'index.html#kat-titel', text: 'Zu den Produkten' })]));
+    }
+
+    /* Demo-Bestellung: nur eine Bestätigung – nichts wird bestellt, nichts bezahlt, keine Daten erfasst */
+    function demoBestellen() {
+      warenkorbSpeichern([]);   /* löscht den Speichereintrag, Zähler → 0 */
+      ziel.textContent = '';
+      status.textContent = '';
+      status.appendChild(document.createTextNode('Vielen Dank – das war eine Demo-Bestellung, es wurde nichts bestellt und nichts bezahlt. '));
+      status.appendChild(el('a', { class: 'textlink', href: 'index.html#kat-titel', text: 'Weiter einkaufen' }));
+      titel.focus();
     }
 
     function zeichnen() {
       ziel.textContent = '';
       var liste = warenkorbLesen();
-      if (!liste.length) {
-        ziel.appendChild(el('p', { class: 'wk-leer', text: 'Ihr Warenkorb ist leer.' }));
-        ziel.appendChild(el('p', { class: 'ende' }, [el('a', { class: 'knopf hell', href: 'index.html#kat-titel', text: 'Zum Sortiment' })]));
-        return;
-      }
+      if (!liste.length) { leerZeigen(); return; }
+
+      var bestellKnopf = el('button', { class: 'knopf', type: 'button', text: 'Demo-Bestellung absenden' });
+      bestellKnopf.addEventListener('click', demoBestellen);
 
       var summenBereich = el('div', { class: 'wk-summen' }, [
         el('dl', null, [
@@ -399,46 +443,65 @@
           el('dt', { text: 'darin enthaltene MwSt. (' + Math.round(MWST_SATZ * 100) + ' %)' }), el('dd', { class: 'wk-mwst' }),
           el('dt', { text: 'Lieferzeit' }), el('dd', { text: LIEFERZEIT })
         ]),
-        el('p', { class: 'preishinweis', text: 'Artikelpreise inkl. MwSt., zzgl. Versand. Versand ' + euro(VERSAND_PREIS) +
-          ', ab ' + euroKurz(VERSANDFREI_AB) + ' Warenwert versandkostenfrei.' }),
-        el('p', { class: 'demo-box', text: 'Demo-Shop: Eine Bestellung oder Bezahlung ist hier nicht möglich.' }),
-        el('p', { class: 'wk-aktionen' }, [el('a', { class: 'knopf hell', href: 'index.html#kat-titel', text: 'Weiter einkaufen' })])
+        el('p', { class: 'preishinweis', text: 'Artikelpreise inkl. MwSt., zzgl. Versand. Versand ' + euro(VERSAND_CENT) +
+          ', ab ' + euroKurz(VERSANDFREI_AB_CENT) + ' Warenwert versandkostenfrei.' }),
+        el('p', { class: 'demo-box', text: 'Demo-Shop: Mit „Demo-Bestellung absenden“ wird nichts bestellt und nichts bezahlt.' }),
+        el('div', { class: 'wk-aktionen' }, [
+          bestellKnopf,
+          el('a', { class: 'knopf hell', href: 'index.html#kat-titel', text: 'Weiter einkaufen' })
+        ])
       ]);
 
       var ul = el('ul', { class: 'wk-liste' });
       liste.forEach(function (pos, i) {
-        var t = variante(pos.sku);
-        var p = t.produkt, v = t.variante;
+        var max = grenze(pos.bestand);
         var feldId = 'menge-' + i;
-        var zeilensumme = el('p', { class: 'wk-zeilensumme preis', text: euro(runden(v.price_gross_eur * pos.menge)) });
-        var mengenfeld = el('input', { id: feldId, type: 'number', min: '1', max: String(v.stock), value: String(pos.menge), inputmode: 'numeric' });
-        var entfernenKnopf = el('button', { class: 'textknopf', type: 'button', text: 'Entfernen', 'aria-label': p.name + ' in ' + v.color + ' entfernen' });
+        var wer = pos.name + ' in ' + pos.farbe;
+        var link = produktSeiteLink(pos.seite) + '?sku=' + encodeURIComponent(pos.sku);
+        var zeilensumme = el('p', { class: 'wk-zeilensumme preis', text: euro(pos.preis_cent * pos.menge) });
+        var mengenfeld = el('input', { id: feldId, type: 'number', min: '1', max: String(max), value: String(pos.menge), inputmode: 'numeric' });
+        var minus = el('button', { class: 'mengen-knopf', type: 'button', text: '−', 'aria-label': 'Menge von ' + wer + ' verringern' });
+        var plus = el('button', { class: 'mengen-knopf', type: 'button', text: '+', 'aria-label': 'Menge von ' + wer + ' erhöhen' });
+        var entfernenKnopf = el('button', { class: 'textknopf', type: 'button', text: 'Entfernen', 'aria-label': wer + ' entfernen' });
         var li = el('li', { class: 'wk-posten' }, [
-          el('a', { class: 'wk-bild bild-link', href: produktLink(p.id) + '&sku=' + encodeURIComponent(v.sku), tabindex: '-1', 'aria-hidden': 'true' }, [bildRahmen(p.id, '')]),
+          el('a', { class: 'wk-bild bild-link', href: link, tabindex: '-1', 'aria-hidden': 'true' }, [bildRahmen(pos.produkt_id, '')]),
           el('div', { class: 'wk-text' }, [
-            el('h2', { class: 'wk-name' }, [el('a', { href: produktLink(p.id) + '&sku=' + encodeURIComponent(v.sku), text: p.name })]),
-            el('p', { class: 'wk-meta', text: 'Farbe: ' + v.color + ' · Art.-Nr. ' + v.sku }),
-            el('p', { class: 'wk-einzel', text: euro(v.price_gross_eur) + ' je Stück' })
+            el('h2', { class: 'wk-name' }, [el('a', { href: link, text: pos.name })]),
+            el('p', { class: 'wk-meta', text: 'Farbe: ' + pos.farbe + ' · Art.-Nr. ' + pos.sku }),
+            el('p', { class: 'wk-einzel', text: euro(pos.preis_cent) + ' je Stück' })
           ]),
-          el('div', { class: 'wk-menge mengenfeld' }, [el('label', { for: feldId, text: 'Menge' }), mengenfeld]),
+          el('div', { class: 'wk-menge mengenfeld' }, [
+            el('label', { for: feldId, text: 'Menge' }),
+            el('div', { class: 'mengen-steuerung' }, [minus, mengenfeld, plus])
+          ]),
           zeilensumme,
           el('div', { class: 'wk-entfernen' }, [entfernenKnopf])
         ]);
 
-        mengenfeld.addEventListener('change', function () {
-          var gewuenscht = Math.floor(+mengenfeld.value) || 1;
-          var neu = mengeSetzen(v.sku, gewuenscht);
+        function knoepfeAnpassen(menge) {
+          minus.disabled = menge <= 1;
+          plus.disabled = menge >= max;
+        }
+
+        function mengeAendern(gewuenscht) {
+          var neu = mengeSetzen(pos.sku, gewuenscht);
           mengenfeld.value = String(neu);
-          zeilensumme.textContent = euro(runden(v.price_gross_eur * neu));
+          zeilensumme.textContent = euro(pos.preis_cent * neu);
+          knoepfeAnpassen(neu);
           summenAktualisieren(summenBereich);
-          status.textContent = gewuenscht > v.stock
-            ? 'Nur ' + v.stock + ' Stück in ' + v.color + ' auf Lager – Menge angepasst.'
-            : 'Menge geändert: ' + p.name + ', ' + v.color + ': ' + neu + ' Stück.';
-        });
+          meldung(gewuenscht > max
+            ? grenzText(max, pos.bestand, pos.farbe) + ' – Menge von ' + wer + ': ' + neu + ' Stück.'
+            : 'Menge von ' + wer + ': ' + neu + ' Stück.');
+        }
+
+        mengenfeld.addEventListener('change', function () { mengeAendern(Math.floor(+mengenfeld.value) || 1); });
+        minus.addEventListener('click', function () { mengeAendern((+mengenfeld.value || 1) - 1); });
+        plus.addEventListener('click', function () { mengeAendern((+mengenfeld.value || 1) + 1); });
+        knoepfeAnpassen(pos.menge);
 
         entfernenKnopf.addEventListener('click', function () {
-          entfernen(v.sku);
-          status.textContent = p.name + ' in ' + v.color + ' wurde entfernt.';
+          entfernen(pos.sku);
+          meldung(wer + ' wurde entfernt.');
           if (!warenkorbLesen().length) { zeichnen(); titel.focus(); return; }
           var naechster = li.nextElementSibling || li.previousElementSibling;
           li.remove();
@@ -455,16 +518,27 @@
       summenAktualisieren(summenBereich);
     }
 
+    warenkorbNeuZeichnen = function () { meldung(''); zeichnen(); };
     zeichnen();
   }
 
   /* ---------- Start ---------- */
+  /* zum Nachvollziehen im Browser (Konsole): studioWarenkorb.hinzufuegen(artikel, menge) */
+  window.studioWarenkorb = { hinzufuegen: hinzufuegen, lesen: warenkorbLesen };
+
   zaehlerAktualisieren();
   window.addEventListener('storage', function () { zaehlerAktualisieren(); });
 
+  /* Zurück-Taste: Seiten aus dem Browser-Zwischenspeicher zeigen sonst einen veralteten Stand.
+     pageshow kommt bei jedem Anzeigen der Seite – Zähler und Warenkorb neu aus dem Speicher lesen. */
+  window.addEventListener('pageshow', function (ereignis) {
+    zaehlerAktualisieren();
+    if (ereignis.persisted && warenkorbNeuZeichnen) warenkorbNeuZeichnen();
+  });
+
   var seite = document.body.getAttribute('data-seite');
-  if (seite === 'start') startseite();
-  else if (seite === 'kategorie') kategorieSeite();
-  else if (seite === 'produkt') produktSeite();
-  else if (seite === 'warenkorb') warenkorbSeite();
+  if (seite === 'warenkorb') warenkorbSeite();
+  else if (seite === 'produktseite') produktSeite();
+  else if (KATALOG && seite === 'start') startseite();
+  else if (KATALOG && seite === 'kategorie') kategorieSeite();
 })();

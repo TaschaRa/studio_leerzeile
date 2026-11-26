@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stifte-Etui „Essence“ – studio.leerzeile</title>
+<link rel="icon" href="../../Logo/favicon/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="../../Logo/favicon/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../../Logo/favicon/favicon-16.png">
+<link rel="apple-touch-icon" href="../../Logo/favicon/apple-touch-icon.png">
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/app.js"></script>
+</head>
+<body data-seite="produktseite" data-basis="../">
+
+<a class="sprungmarke" href="#inhalt">Direkt zum Inhalt</a>
+
+<p class="demohinweis">Demo-Shop: keine echten Bestellungen</p>
+
+<!-- ===== Kopfbereich ===== -->
+<header class="kopf">
+  <div class="kopf-zeile">
+    <a class="logo" href="../index.html">
+      <img src="../../Logo/studio-leerzeile-logo-kurz-transparent.png" alt="studio.leerzeile – Startseite">
+    </a>
+
+    <!-- nur am Handy sichtbar (und nur mit JavaScript): klappt die Navigation auf und zu -->
+    <button class="menue-knopf" type="button" aria-expanded="false" aria-controls="hauptnavigation">Menü</button>
+
+    <nav class="navi" id="hauptnavigation" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="../kategorie.html?id=SCH">Schreiben</a></li>
+        <li><a href="../kategorie.html?id=NP">Notieren &amp; Planen</a></li>
+        <li><a href="../kategorie.html?id=OA">Ordnen &amp; Aufbewahren</a></li>
+        <li><a href="../kategorie.html?id=SG">Sets &amp; Geschenke</a></li>
+      </ul>
+    </nav>
+
+    <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+  </div>
+</header>
+
+<main id="inhalt">
+  <div class="unterseite">
+    <div class="inhalt">
+      <nav class="brotkrumen" aria-label="Brotkrumen">
+        <ol>
+          <li><a href="../index.html">Startseite</a></li>
+          <li><a href="../kategorie.html?id=SCH">Schreiben</a></li>
+          <li aria-current="page">Stifte-Etui „Essence“</li>
+        </ol>
+      </nav>
+
+      <!-- Angaben für den Warenkorb (js/shop.js liest sie aus): erzeugt aus daten/import/produkte.json -->
+      <div class="produkt-detail" data-produkt-id="ST-SCH-004" data-name="Stifte-Etui „Essence“"
+           data-preis-cent="1990" data-seite="stifte_etui_essence.html">
+        <div class="produkt-bild">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild" src="../../Bilder/produkte-zugeschnitten/ST-SCH-004.png" width="867" height="415"
+                 alt="Terrakottafarbenes, längliches Stifte-Etui mit Klappe und goldenem Druckknopf auf hellem Untergrund.">
+          </div>
+          <p class="bild-hinweis">Abbildung zeigt eine Beispielvariante. Die gewählte Farbe kann abweichen. Produktabbildung KI-generiert.</p>
+        </div>
+
+        <div class="produkt-info">
+          <p class="prod-kategorie"><a href="../kategorie.html?id=SCH">Schreiben</a></p>
+          <h1>Stifte-Etui „Essence“</h1>
+          <p class="preis">19,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <p class="produkt-kurztext">Schmales Stifte-Etui in Lederoptik mit Druckknopf für ein bis zwei Schreibgeräte.</p>
+          <p class="produkt-text">Ihr Lieblingsstift verdient einen festen Platz. Das Stifte-Etui „Essence“ bewahrt ein bis zwei Schreibgeräte in einer schlanken Hülle auf – im Büro, in der Tasche oder unterwegs. Die Oberfläche in Lederoptik und der Druckknopfverschluss verleihen dem Etui einen aufgeräumten, zeitlosen Charakter. Besonders schön in Kombination mit „Signature“, „Pure“ oder „Flow“.</p>
+
+          <fieldset class="farbwahl">
+            <legend>Farbe: <span class="farbname">Elfenbein</span></legend>
+            <div class="farbfelder">
+              <label class="farbfeld" title="Elfenbein">
+                <input type="radio" name="farbe" value="ST-SCH-004-IV" aria-label="Elfenbein"
+                       data-sku="ST-SCH-004-IV" data-farbe="Elfenbein" data-bestand="22" checked>
+                <span class="farbpunkt" style="--farbe:#F0E9DF" aria-hidden="true"></span>
+              </label>
+              <label class="farbfeld" title="Salbeigrün">
+                <input type="radio" name="farbe" value="ST-SCH-004-SG" aria-label="Salbeigrün"
+                       data-sku="ST-SCH-004-SG" data-farbe="Salbeigrün" data-bestand="17">
+                <span class="farbpunkt" style="--farbe:#98A489" aria-hidden="true"></span>
+              </label>
+              <label class="farbfeld" title="Terrakotta">
+                <input type="radio" name="farbe" value="ST-SCH-004-TE" aria-label="Terrakotta"
+                       data-sku="ST-SCH-004-TE" data-farbe="Terrakotta" data-bestand="20">
+                <span class="farbpunkt" style="--farbe:#B95A37" aria-hidden="true"></span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="kaufzeile">
+            <div class="mengenfeld">
+              <label for="menge">Menge</label>
+              <input id="menge" type="number" min="1" max="10" value="1" inputmode="numeric">
+            </div>
+            <button class="knopf" type="button" id="in-den-warenkorb">In den Warenkorb</button>
+          </div>
+          <noscript><p class="kauf-status">Bitte aktivieren Sie JavaScript, um Artikel in den Warenkorb zu legen.</p></noscript>
+          <p class="kauf-status" role="status"></p>
+
+          <dl class="eckdaten">
+            <dt>Artikelnummer</dt><dd class="sku">ST-SCH-004-IV</dd>
+            <dt>Verfügbarkeit</dt><dd class="bestand-text">22 Stück auf Lager (Demo-Bestand)</dd>
+            <dt>Material</dt><dd>Lederoptik</dd>
+            <dt>Verschluss</dt><dd>Druckknopf</dd>
+            <dt>Kapazität</dt><dd>1–2 Schreibgeräte</dd>
+            <dt>Versand</dt><dd>4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
+            <dt>Lieferzeit</dt><dd>2–4 Werktage</dd>
+            <dt>Rückgabe</dt><dd>30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ===== Fußbereich ===== -->
+<footer class="fuss">
+  <div class="fuss-raster">
+    <div>
+      <h3>Sortiment</h3>
+      <ul>
+        <li><a href="../kategorie.html?id=SCH">Schreiben</a></li>
+        <li><a href="../kategorie.html?id=NP">Notieren &amp; Planen</a></li>
+        <li><a href="../kategorie.html?id=OA">Ordnen &amp; Aufbewahren</a></li>
+        <li><a href="../kategorie.html?id=SG">Sets &amp; Geschenke</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Service</h3>
+      <ul>
+        <li><a href="../index.html#serv-titel">Versand</a></li>
+        <li><a href="../index.html#serv-titel">Rückgabe</a></li>
+        <li><a href="../index.html#serv-titel">Kontakt</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Rechtliches</h3>
+      <ul>
+        <li><a href="../impressum.html">Impressum (Platzhalter)</a></li>
+        <li><a href="../datenschutz.html">Datenschutzerklärung (Platzhalter)</a></li>
+        <li><a href="#">AGB (Platzhalter)</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="riesenmarke">
+    <img src="../../Logo/studio-leerzeile-logo-kurz-transparent.png" alt="" aria-hidden="true">
+  </div>
+
+  <div class="fuss-schluss">
+    <span class="unterzeile">papier. ideen. lieblingsstücke.</span>
+    <span>Demo-Shop der KI-Manager-Weiterbildung – alle Produkte, Preise und Firmendaten sind erfunden.</span>
+    <span class="ki-hinweis">Produktbilder KI-generiert · Beispielbilder; Farben können abweichen.</span>
+    <span>© 2026 studio.leerzeile</span>
+  </div>
+</footer>
+
+<script src="../js/shop.js"></script>
+</body>
+</html>

@@ -266,6 +266,13 @@ section{padding:clamp(60px,9vw,130px) 0;}
 
 /* Produktdetail */
 .zurueck-zeile{margin:0 0 clamp(16px,3vw,32px);}
+/* Brotkrumen: Startseite › Kategorie › Produkt */
+.brotkrumen{margin:0 0 clamp(16px,3vw,32px);font-size:var(--t-small);color:var(--salbei);}
+.brotkrumen ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;}
+.brotkrumen li{display:inline-flex;align-items:center;}
+.brotkrumen li + li::before{content:"›";margin:0 10px;color:var(--salbei);}
+.brotkrumen a{color:var(--terrakotta);text-underline-offset:4px;}
+.produkt-kurztext{margin:0 0 12px;font-size:19px;}
 .produkt-detail{
   display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
   gap:clamp(32px,5vw,80px);align-items:start;
@@ -349,7 +356,22 @@ section{padding:clamp(60px,9vw,130px) 0;}
 .wk-summen dd{margin:0;text-align:right;font-size:16px;}
 .wk-summen dd.gesamt{font-family:var(--serif);font-size:24px;color:var(--anthrazit);}
 .demo-box{background:var(--flaeche);padding:14px 18px;font-size:16px;margin:18px 0 0;}
-.wk-aktionen{text-align:right;margin:24px 0 0;}
+.wk-aktionen{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px;margin:24px 0 0;}
+.wk-aktionen .knopf{text-align:center;}
+
+/* Menge im Warenkorb: − Feld + (Tippflächen 44 px) */
+.mengen-steuerung{display:flex;align-items:stretch;}
+.mengen-knopf{
+  width:44px;min-height:48px;padding:0;
+  font:inherit;font-size:22px;line-height:1;color:var(--terrakotta);
+  background:var(--weiss);border:1px solid var(--salbei);cursor:pointer;
+}
+.mengen-knopf:hover{background:var(--flaeche);}
+.mengen-knopf:focus-visible{outline:2px solid var(--terrakotta);outline-offset:2px;position:relative;z-index:1;}
+.mengen-knopf:disabled{color:var(--salbei);opacity:.55;cursor:not-allowed;}
+.mengen-steuerung input{width:56px;text-align:center;border-left:0;border-right:0;-moz-appearance:textfield;}
+.mengen-steuerung input::-webkit-inner-spin-button,
+.mengen-steuerung input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0;}
 
 /* ---------- Schmale Bildschirme ---------- */
 @media (max-width:900px){
@@ -414,15 +436,17 @@ section{padding:clamp(60px,9vw,130px) 0;}
   /* Tippflächen ≥ 44 px: unsichtbarer Innenabstand, negativer Außenabstand gleicht ihn aus (nichts verschiebt sich) */
   .prod-name a{display:inline-block;padding:10px 0;margin:-10px 0;}
   .produkt-info .prod-kategorie a{display:inline-block;padding:14px 0;margin:-14px 0;}
+  .brotkrumen a{display:inline-flex;align-items:center;min-height:44px;}
 }
 @media (max-width:700px){
   /* Warenkorb am Handy: Bild + Text, darunter Menge und Summe, dann "Entfernen" */
   .wk-posten{
     grid-template-columns:88px minmax(0,1fr);
-    grid-template-areas:"bild text" "menge summe" "entfernen entfernen";
+    grid-template-areas:"bild text" "menge menge" "entfernen summe";
     gap:12px 16px;
   }
-  .wk-zeilensumme{align-self:end;}
+  .wk-zeilensumme{align-self:center;}
   .wk-summen{max-width:none;margin-left:0;}
-  .wk-aktionen{text-align:left;}
+  .wk-aktionen{justify-content:flex-start;}
+  .wk-aktionen .knopf{flex:1 1 100%;}
 }

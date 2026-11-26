@@ -7,14 +7,15 @@ Demo-Shop **studio.leerzeile**: kleine Papeterie (Schreibwaren, Notizbücher, Or
 - `website/ueber-uns.html` – Über uns
 - `website/impressum.html`, `website/datenschutz.html` – nur Platzhalter
 - `website/kategorie.html?id=SCH|NP|OA|SG` – Produkte einer Kategorie
-- `website/produkt.html?id=ST-…` – Produktdetail mit Farbwahl (Varianten-SKU, Bestand)
+- `website/produkte/<seitenname>.html` – 12 Produktseiten mit Farbwahl, **erzeugt** von `werkzeuge/produktseiten_erzeugen.js` aus `daten/import/produkte.json` (Seitenname = Slug klein, „-“ → „_“, z. B. `fuellfederhalter_signature.html`; der Slug in `produkte.json` bleibt unverändert). Nicht von Hand bearbeiten.
 - `website/warenkorb.html` – Warenkorb (nur im Browser gespeichert, keine Bestellung)
-  (alle sieben Seiten teilen Kopf- und Fußbereich sowie `css/style.css`, `js/app.js`, `data/shopdaten.js`, `js/shop.js`;
-  Änderungen an Kopf oder Fuß deshalb in allen Seiten vornehmen; `<body data-seite="…">` sagt shop.js, welche Seite es ist)
+  (alle Seiten teilen Kopf- und Fußbereich sowie `css/style.css`, `js/app.js`, `js/shop.js`; die Produktseiten übernehmen Kopf und Fuß beim Erzeugen aus `impressum.html`.
+  Änderungen an Kopf oder Fuß deshalb in allen Seiten in `website/` vornehmen und danach die Produktseiten neu erzeugen. `<body data-seite="…">` sagt shop.js, welche Seite es ist; Produktseiten haben zusätzlich `data-basis="../"`.)
 - `website/css/style.css` – Gestaltung (Farben, Schriften, Abstände, Handy-Ansicht)
 - `website/js/app.js` – Verhalten (Menü-Schaltfläche am Handy, feststehende Kopfzeile)
-- `website/js/shop.js` – Shop: Katalog lesen, Kategorie-/Produkt-/Warenkorbseite aufbauen, Warenkorb (localStorage), Bild-Ausschnitte und Alternativtexte je Produkt
-- `website/data/shopdaten.js` – Katalog als `window.STUDIO_CATALOG` (Kopie von `daten/import/shopdaten.js`, nicht von Hand bearbeiten)
+- `website/js/shop.js` – Shop: Warenkorb (localStorage), Produktseiten (liest data-Attribute), Startseite und Kategorieseiten (lesen den Katalog), Bild-Ausschnitte und Alternativtexte der Kacheln
+- `website/data/shopdaten.js` – Katalog als `window.STUDIO_CATALOG` (Kopie von `daten/import/shopdaten.js`, nicht von Hand bearbeiten). **Nur noch von Startseite und Kategorieseite geladen**; Produktseiten und Warenkorb brauchen ihn nicht.
+- `werkzeuge/produktseiten_erzeugen.js` – erzeugt die Produktseiten (`node werkzeuge/produktseiten_erzeugen.js` im Projektordner)
 - `daten/` – Lieferpaket: **`daten/import/produkte.json` ist die führende Datenquelle**; `shopdaten.js` ist daraus abgeleitet. Bilder aus `daten/assets` werden **nicht** benutzt.
 - **Keine Excel-Dateien im Projekt.** Produktdaten liegen in `daten/import/produkte.json`, ab dem 10.12. in einer Datenbank. (`*.xlsx`, `*.xls`, `*.xlsm` stehen in der `.gitignore`.)
 - `Logo/` – Logo-Dateien (im HTML eingebunden über `../Logo/…`)
@@ -30,6 +31,10 @@ Demo-Shop **studio.leerzeile**: kleine Papeterie (Schreibwaren, Notizbücher, Or
 - `.claude/launch.json` – startet den Vorschau-Server (`http://localhost:8080/website/index.html`)
 
 Die Ordner `Logo` und `Bilder` bleiben im Projektordner; Pfade nicht verändern.
+
+**Dateinamen:** Neue Dateien klein, ohne Leerzeichen, mit Unterstrich statt Bindestrich (Wunsch des Dozenten), z. B. `produktseiten_erzeugen.js`. Bestehende Dateien bleiben unverändert.
+
+**Produktseiten und Katalog:** Name, Farbe, SKU, Preis in Cent und Bestand stehen als data-Attribute in den Produktseiten (`data-produkt-id`, `data-name`, `data-preis-cent`, `data-seite` am Produkt; `data-sku`, `data-farbe`, `data-bestand` an jeder Farbe). Ändern sich Preise, Bestand, Texte oder Farben in `produkte.json`, die Seiten mit `node werkzeuge/produktseiten_erzeugen.js` neu erzeugen (und `shopdaten.js` nach `website/data/` kopieren).
 
 ## Gestaltung
 - Farben mit festen Rollen:
@@ -55,15 +60,24 @@ Die Ordner `Logo` und `Bilder` bleiben im Projektordner; Pfade nicht verändern.
 ## Pflicht-Inhalte
 - Preise immer mit „inkl. MwSt., zzgl. Versand“.
 - Versand- und Rückgabeaussagen überall gleich (Demo-Angaben, Ansprache „Sie“):
-  - Versand 4,90 €, ab 50 € Warenwert versandkostenfrei (Werte in `shop_policies_demo` im Katalog; der Warenkorb rechnet damit)
+  - Versand 4,90 €, ab 50 € Warenwert versandkostenfrei (Werte wie `shop_policies_demo` im Katalog; im Warenkorb **fest in `js/shop.js`** – ändern sie sich im Katalog, dort von Hand nachziehen, ebenso 19 % MwSt.)
   - Lieferzeit 2–4 Werktage
   - 30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); gesetzliche Verbraucherrechte bleiben unberührt
 - Oben auf jeder Seite: „Demo-Shop: keine echten Bestellungen“.
 - Impressum und Datenschutzerklärung nur als Platzhalter.
 - Keine Bezahlfunktion. Keine echten Personendaten. Keine EAN/GTIN, keine echten Lieferanten.
 - Bruttopreis ist führend; Netto = Brutto / 1,19 (auf 2 Stellen gerundet), MwSt. = Brutto − Netto. Kundinnen und Kunden sehen Bruttopreise.
-- Warenkorb speichert pro Position Varianten-SKU, Farbe, Menge und Bruttopreis; Menge höchstens bis zum (Demo-)Bestand.
 - Kein `fetch()` lokaler Dateien: Die Seiten müssen auch per Doppelklick (`file:///`) funktionieren.
+
+## Warenkorb
+- Speicher (`localStorage`, Schlüssel `studio-leerzeile-warenkorb`) erst beim ersten Hinzufügen anlegen; ist der Warenkorb leer, den Eintrag ganz löschen (`removeItem`), nie `[]` speichern.
+- Nur Artikel speichern (`sku`, `produkt_id`, `name`, `farbe`, `preis_cent`, `bestand`, `seite`, `menge`) – **keine Personendaten**, keine Eingabefelder für Namen oder Adressen. Der Warenkorb braucht keinen Katalog: Link aus `seite`, Bild aus `produkt_id`.
+- `hinzufuegen(artikel, menge)` mit `artikel = { sku, produkt_id, name, farbe, preis_cent, bestand, seite }`; ungültige Werte (z. B. Preis keine ganze Zahl in Cent, `seite` nicht klein mit Unterstrich und `.html`) werden ohne Fehler abgelehnt. Produktseiten befüllen `artikel` aus ihren data-Attributen, Startseite/Kategorieseiten aus dem Katalog.
+- Geld immer in ganzen **Cent** rechnen (Warenwert, Versand, Gesamtsumme, MwSt.); Katalogpreise einmal mit `Math.round(preis * 100)` umwandeln, erst bei der Anzeige in Euro (de-DE, z. B. „114,80 €“). Einträge ohne vollständige Angaben (z. B. ältere Formate ohne `bestand`/`seite` oder mit `preis_brutto`) und unlesbare Einträge werden beim Lesen ohne Fehler verworfen.
+- Menge je Artikel 1 bis 10, nie über den (Demo-)Bestand; Buttons „−“/„+“ mit verständlichem `aria-label`, Tippflächen mindestens 44 px.
+- Rückmeldungen (Hinzufügen, Menge, Entfernen, Bestellung) als Statusmeldung mit `role="status"`, damit Screenreader sie vorlesen.
+- „Demo-Bestellung absenden“ zeigt nur eine Bestätigung und leert den Warenkorb – nichts wird bestellt oder bezahlt.
+- Bei `pageshow` (z. B. Zurück-Taste) Zähler und Warenkorb neu aus dem Speicher lesen.
 - Passwörter und Schlüssel nur in `.env`, nie im Code oder im Chat.
 - Kundinnen und Kunden mit „Sie“ ansprechen; Ton warm, ruhig, hochwertig, kurz.
 
