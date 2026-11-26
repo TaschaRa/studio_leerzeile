@@ -18,6 +18,7 @@ Demo-Shop **studio.leerzeile**: kleine Papeterie (Schreibwaren, Notizbücher, Or
 - `daten/` – Lieferpaket: **`daten/import/produkte.json` ist die führende Datenquelle**; `shopdaten.js` ist daraus abgeleitet. Bilder aus `daten/assets` werden **nicht** benutzt.
 - **Keine Excel-Dateien im Projekt.** Produktdaten liegen in `daten/import/produkte.json`, ab dem 10.12. in einer Datenbank. (`*.xlsx`, `*.xls`, `*.xlsm` stehen in der `.gitignore`.)
 - `Logo/` – Logo-Dateien (im HTML eingebunden über `../Logo/…`)
+- `Logo/favicon/` – Favicon-Dateien (im `<head>` aller Seiten eingebunden)
 - `Bilder/` – Bilder (im HTML `../Bilder/…`, in der CSS-Datei `../../Bilder/…`)
   - `Bilder/produkte-zugeschnitten/` – Produktbilder für die Seite, Dateiname = Artikelnummer (z. B. `ST-SCH-001.png`). **Diese verwenden, nicht `Bilder/produkte/`.**
   - `Bilder/kategorien-zugeschnitten/` – Kategoriebilder `sch.png`, `np.png`, `oa.png`, `sg.png` für die Kategoriekacheln der Startseite.
@@ -53,6 +54,10 @@ Die Ordner `Logo` und `Bilder` bleiben im Projektordner; Pfade nicht verändern.
 
 ## Pflicht-Inhalte
 - Preise immer mit „inkl. MwSt., zzgl. Versand“.
+- Versand- und Rückgabeaussagen überall gleich (Demo-Angaben, Ansprache „Sie“):
+  - Versand 4,90 €, ab 50 € Warenwert versandkostenfrei (Werte in `shop_policies_demo` im Katalog; der Warenkorb rechnet damit)
+  - Lieferzeit 2–4 Werktage
+  - 30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); gesetzliche Verbraucherrechte bleiben unberührt
 - Oben auf jeder Seite: „Demo-Shop: keine echten Bestellungen“.
 - Impressum und Datenschutzerklärung nur als Platzhalter.
 - Keine Bezahlfunktion. Keine echten Personendaten. Keine EAN/GTIN, keine echten Lieferanten.

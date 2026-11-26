@@ -11,6 +11,14 @@
 
   var SPEICHER_SCHLUESSEL = 'studio-leerzeile-warenkorb';
   var MWST_SATZ = KATALOG.vat_rate || 0.19;
+
+  /* Versand (Demo-Angaben aus dem Katalog: shop_policies_demo): 4,90 €, ab 50 € Warenwert versandkostenfrei */
+  var REGELN = KATALOG.shop_policies_demo || {};
+  var VERSAND_PREIS = typeof REGELN.shipping_price_eur === 'number' ? REGELN.shipping_price_eur : 4.9;
+  var VERSANDFREI_AB = typeof REGELN.free_shipping_from_eur === 'number' ? REGELN.free_shipping_from_eur : 50;
+  var LIEFERZEIT = '2–4 Werktage';
+  function versandkosten(warenwert) { return warenwert >= VERSANDFREI_AB ? 0 : VERSAND_PREIS; }
+
   var BILD_HINWEIS = 'Beispielbild – die abgebildete Farbe kann von der gewählten Variante abweichen.';
 
   /* Bilder: die zugeschnittenen Dateien, Pfad aus der Artikelnummer abgeleitet
@@ -52,6 +60,8 @@
   /* ---------- Hilfsfunktionen ---------- */
   var euroFormat = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' });
   function euro(betrag) { return euroFormat.format(betrag); }
+  /* ganze Beträge ohne Nachkommastellen, z. B. "50 €" */
+  function euroKurz(betrag) { return betrag % 1 === 0 ? betrag + ' €' : euro(betrag); }
   function runden(x) { return Math.round(x * 100) / 100; }
   /* Brutto ist führend: Netto = Brutto / 1,19 (gerundet), MwSt. = Brutto – Netto */
   function nettoAus(brutto) { return runden(brutto / (1 + MWST_SATZ)); }
@@ -358,13 +368,17 @@
 
     function summenAktualisieren(bereich) {
       var liste = warenkorbLesen();
-      var summe = runden(liste.reduce(function (s, pos) {
+      var warenwert = runden(liste.reduce(function (s, pos) {
         return s + variante(pos.sku).variante.price_gross_eur * pos.menge;
       }, 0));
-      var netto = nettoAus(summe);
+      var versand = versandkosten(warenwert);
+      var gesamt = runden(warenwert + versand);
+      var netto = nettoAus(gesamt);   /* Versand ist ein Bruttobetrag, die MwSt. gilt für die Gesamtsumme */
       bereich.querySelector('.wk-anzahl').textContent = anzahl(liste) + ' Artikel';
-      bereich.querySelector('.wk-zwischensumme').textContent = euro(summe);
-      bereich.querySelector('.wk-mwst').textContent = euro(runden(summe - netto));
+      bereich.querySelector('.wk-warenwert').textContent = euro(warenwert);
+      bereich.querySelector('.wk-versand').textContent = versand === 0 ? euro(0) + ' (versandkostenfrei)' : euro(versand);
+      bereich.querySelector('.wk-gesamt').textContent = euro(gesamt);
+      bereich.querySelector('.wk-mwst').textContent = euro(runden(gesamt - netto));
     }
 
     function zeichnen() {
@@ -379,11 +393,14 @@
       var summenBereich = el('div', { class: 'wk-summen' }, [
         el('dl', null, [
           el('dt', { text: 'Anzahl' }), el('dd', { class: 'wk-anzahl' }),
-          el('dt', { text: 'Zwischensumme' }), el('dd', { class: 'wk-zwischensumme gesamt' }),
+          el('dt', { text: 'Warenwert' }), el('dd', { class: 'wk-warenwert' }),
+          el('dt', { text: 'Versand' }), el('dd', { class: 'wk-versand' }),
+          el('dt', { text: 'Gesamtsumme' }), el('dd', { class: 'wk-gesamt gesamt' }),
           el('dt', { text: 'darin enthaltene MwSt. (' + Math.round(MWST_SATZ * 100) + ' %)' }), el('dd', { class: 'wk-mwst' }),
-          el('dt', { text: 'Versand' }), el('dd', { text: 'wird im Demo-Shop nicht berechnet' })
+          el('dt', { text: 'Lieferzeit' }), el('dd', { text: LIEFERZEIT })
         ]),
-        el('p', { class: 'preishinweis', text: 'Alle Preise inkl. MwSt., zzgl. Versand.' }),
+        el('p', { class: 'preishinweis', text: 'Artikelpreise inkl. MwSt., zzgl. Versand. Versand ' + euro(VERSAND_PREIS) +
+          ', ab ' + euroKurz(VERSANDFREI_AB) + ' Warenwert versandkostenfrei.' }),
         el('p', { class: 'demo-box', text: 'Demo-Shop: Eine Bestellung oder Bezahlung ist hier nicht möglich.' }),
         el('p', { class: 'wk-aktionen' }, [el('a', { class: 'knopf hell', href: 'index.html#kat-titel', text: 'Weiter einkaufen' })])
       ]);
