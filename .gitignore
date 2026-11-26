@@ -12,6 +12,11 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
+# Keine Excel-Dateien im Projekt (Produktdaten: daten/import/produkte.json)
+*.xlsx
+*.xls
+*.xlsm
+
 # Spätere Werkzeuge
 node_modules/
 *.log

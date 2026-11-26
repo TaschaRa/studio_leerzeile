@@ -16,6 +16,7 @@ Demo-Shop **studio.leerzeile**: kleine Papeterie (Schreibwaren, Notizbücher, Or
 - `website/js/shop.js` – Shop: Katalog lesen, Kategorie-/Produkt-/Warenkorbseite aufbauen, Warenkorb (localStorage), Bild-Ausschnitte und Alternativtexte je Produkt
 - `website/data/shopdaten.js` – Katalog als `window.STUDIO_CATALOG` (Kopie von `daten/import/shopdaten.js`, nicht von Hand bearbeiten)
 - `daten/` – Lieferpaket: **`daten/import/produkte.json` ist die führende Datenquelle**; `shopdaten.js` ist daraus abgeleitet. Bilder aus `daten/assets` werden **nicht** benutzt.
+- **Keine Excel-Dateien im Projekt.** Produktdaten liegen in `daten/import/produkte.json`, ab dem 10.12. in einer Datenbank. (`*.xlsx`, `*.xls`, `*.xlsm` stehen in der `.gitignore`.)
 - `Logo/` – Logo-Dateien (im HTML eingebunden über `../Logo/…`)
 - `Bilder/` – Bilder (im HTML `../Bilder/…`, in der CSS-Datei `../../Bilder/…`)
   - `Bilder/produkte-zugeschnitten/` – Produktbilder für die Seite, Dateiname = Artikelnummer (z. B. `ST-SCH-001.png`). **Diese verwenden, nicht `Bilder/produkte/`.**
