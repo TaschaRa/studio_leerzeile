@@ -1,0 +1,18 @@
+# Geheimnisse – nie ins Repository
+.env
+.env.*
+*.key
+*.pem
+
+# Persönliche Claude-Code-Einstellungen (launch.json wird geteilt)
+.claude/settings.local.json
+
+# Systemdateien von Windows und macOS
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Spätere Werkzeuge
+node_modules/
+*.log
+~$*

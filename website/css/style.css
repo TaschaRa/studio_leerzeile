@@ -1,0 +1,428 @@
+/* studio.leerzeile – Gestaltung der Startseite
+   Aus dem Entwurf übernommen (sicherung/index.html), ergänzt um das Handy-Menü. */
+
+:root{
+  --creme:#FAFAF7;          /* Hintergrund, fast Weiß */
+  --anthrazit:#161616;      /* Text */
+  --terrakotta:#B8441F;     /* Akzent: nur für Handlungen */
+  --salbei:#3D5C4B;         /* Labels, Linien, leise Texte */
+  --flaeche:#E7ECE5;        /* Flächen und Kacheln: zartes Salbei */
+  --weiss:#FFFFFF;
+
+  --t-hero:clamp(34px, 5vw, 66px);
+  --t-xl:clamp(28px, 4vw, 46px);
+  --t-body:17px;
+  --t-small:14px;
+  --t-label:12px;
+
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+
+  --rand:clamp(20px, 5vw, 72px);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+
+body{
+  margin:0;
+  background:var(--creme);
+  color:var(--anthrazit);
+  font-family:var(--sans);
+  font-size:var(--t-body);
+  line-height:1.7;
+}
+
+h1,h2,h3,.preis{font-family:var(--serif);font-weight:400;line-height:1.15;}
+a{color:var(--terrakotta);}
+img{display:block;max-width:100%;height:auto;}
+
+a:focus-visible,button:focus-visible{outline:2px solid var(--terrakotta);outline-offset:4px;}
+
+.inhalt{max-width:1240px;margin:0 auto;padding:0 var(--rand);}
+
+.sprungmarke{
+  position:absolute;left:-9999px;
+  background:var(--anthrazit);color:var(--creme);padding:10px 16px;z-index:20;
+}
+.sprungmarke:focus{left:16px;top:8px;}
+
+/* kleines, weit gesperrtes Label */
+.label{
+  font-size:var(--t-label);letter-spacing:.28em;text-transform:uppercase;
+  color:var(--salbei);margin:0 0 22px;
+}
+.label.zentriert{text-align:center;}
+
+/* Funktions-Button: gefüllt, löst eine Handlung aus */
+.knopf{
+  display:inline-block;background:var(--terrakotta);
+  border:1px solid var(--terrakotta);color:var(--weiss);
+  font-family:var(--sans);font-size:var(--t-label);
+  letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
+  padding:15px 34px;cursor:pointer;
+  transition:background-color .25s ease,color .25s ease;
+}
+.knopf:hover{background:var(--anthrazit);border-color:var(--anthrazit);color:var(--weiss);}
+/* Nebenaktion: umrandet, führt nur weiter */
+.knopf.hell{background:none;border-color:var(--terrakotta);color:var(--terrakotta);}
+.knopf.hell:hover{background:var(--terrakotta);color:var(--weiss);}
+
+/* ---------- Demo-Hinweis ---------- */
+.demohinweis{
+  background:var(--anthrazit);color:var(--creme);
+  font-size:var(--t-label);letter-spacing:.2em;text-transform:uppercase;
+  text-align:center;padding:10px 16px;margin:0;
+}
+
+/* ---------- Kopfbereich ---------- */
+.kopf{padding:22px var(--rand);}
+.kopf-zeile{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:clamp(16px,3vw,48px);flex-wrap:wrap;
+}
+.logo img{width:clamp(180px,20vw,250px);}
+.navi ul{display:flex;gap:clamp(14px,2vw,32px);list-style:none;margin:0;padding:0;flex-wrap:wrap;}
+.navi a,.warenkorb{
+  font-size:var(--t-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
+}
+.navi a{color:var(--anthrazit);padding-bottom:2px;border-bottom:1px solid transparent;}
+.navi a:hover{border-bottom-color:var(--terrakotta);}
+.warenkorb{color:var(--terrakotta);white-space:nowrap;}
+.warenkorb:hover{text-decoration:underline;text-underline-offset:4px;}
+
+/* Desktop: Kopfzeile bleibt beim Scrollen oben stehen */
+@media (min-width:901px){
+  .kopf{
+    position:sticky;top:0;z-index:10;
+    background:var(--creme);
+    transition:box-shadow .25s ease;
+  }
+  /* feine Linie, sobald gescrollt wird (Klasse setzt app.js); box-shadow verändert keine Abstände */
+  .kopf.gescrollt{box-shadow:0 1px 0 rgba(61,92,75,.25);}
+  /* Sprungziele (#kat-titel, #serv-titel …) landen unterhalb der Kopfzeile statt dahinter */
+  html{scroll-padding-top:calc(var(--kopf-hoehe, 90px) + 16px);}
+}
+
+/* Menü-Schaltfläche: nur am Handy und nur mit JavaScript sichtbar */
+.menue-knopf{display:none;}
+
+/* ---------- Startbereich: randlos, Text im Bild ---------- */
+/* Pfad relativ zu dieser CSS-Datei: website/css/ → ../../Bilder */
+.start{
+  min-height:clamp(360px,34vw,620px);
+  background-image:url("../../Bilder/studio_leerzeile_hero_02_weisser_fueller.png");
+  background-size:cover;
+  background-position:right center;
+  background-repeat:no-repeat;
+  background-color:var(--flaeche);
+  display:flex;align-items:center;
+  padding:clamp(48px,7vw,96px) var(--rand);
+}
+.start-text{max-width:30ch;}
+.start h1{
+  font-size:var(--t-hero);letter-spacing:-.01em;
+  margin:0 0 22px;
+}
+.start p{margin:0 0 34px;max-width:28ch;}
+
+/* ---------- Abschnitte ---------- */
+section{padding:clamp(60px,9vw,130px) 0;}
+.abschnittskopf{text-align:center;margin-bottom:clamp(36px,5vw,72px);}
+.abschnittskopf h2{font-size:var(--t-xl);margin:0 auto 14px;max-width:18ch;}
+.abschnittskopf p{margin:0 auto;color:var(--salbei);max-width:46ch;}
+
+/* Bildfläche ohne Rahmen – einheitlich 4:3 für Kategorie- und Produktkacheln */
+.flaeche{
+  aspect-ratio:4/3;background:var(--flaeche);
+  display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:16px;color:var(--salbei);
+  font-size:var(--t-label);letter-spacing:.2em;text-transform:uppercase;
+  transition:opacity .25s ease;
+}
+
+/* Echte Bilder in Kacheln:
+   <div class="kachelbild-rahmen"><img class="kachelbild ausschnitt-…" src="../Bilder/produkte-zugeschnitten/…" alt="…"></div>
+   Immer 4:3, randlos, füllt die Kachel (object-fit: cover).
+   Die Bilddateien haben oben/links eine 1 px helle Kante; das Bild wird deshalb um 3 %
+   vergrößert und der Rahmen schneidet das Überstehende ab – so ist kein heller Rand sichtbar. */
+.kachelbild-rahmen{
+  aspect-ratio:4/3;overflow:hidden;background:var(--flaeche);
+  transition:opacity .25s ease;
+}
+.kachelbild{
+  display:block;width:100%;height:100%;
+  object-fit:cover;object-position:center;
+  transform:scale(1.03);
+}
+.kat-karte:hover .kachelbild-rahmen,.prod-karte:hover .kachelbild-rahmen{opacity:.78;}
+
+/* Ausschnitt pro Motiv, damit nichts Wichtiges abgeschnitten wird */
+.ausschnitt-mitte{object-position:50% 50%;}   /* breite Motive: Füller */
+.ausschnitt-notizbuch{object-position:30% 50%;} /* Notizbuch: Buchrücken links und Gummiband rechts bleiben sichtbar */
+.ausschnitt-unten{object-position:50% 100%;}  /* Mappe, Set: oben fällt nur Hintergrund weg */
+.ausschnitt-links{object-position:20% 50%;}       /* sehr breite Blöcke: Überschrift links bleibt sichtbar */
+.ausschnitt-leicht-links{object-position:40% 50%;} /* Kugelschreiber: Spitze bleibt sichtbar */
+
+/* ---------- Kategorien ---------- */
+.kat-raster{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,3vw,44px);}
+.kat-karte{text-decoration:none;color:var(--anthrazit);display:block;}
+.kat-karte:hover .flaeche{opacity:.78;}
+.kat-karte h3{font-size:21px;margin:20px 0 4px;}
+.kat-karte span{font-size:var(--t-small);color:var(--salbei);}
+
+/* ---------- Produkte ---------- */
+.prod-raster{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(22px,4vw,56px);}
+.prod-karte{display:flex;flex-direction:column;}
+.prod-karte:hover .flaeche{opacity:.78;}
+.prod-kategorie{
+  font-size:var(--t-label);letter-spacing:.2em;text-transform:uppercase;
+  color:var(--salbei);margin:22px 0 8px;
+}
+.prod-karte h3{font-size:22px;margin:0 0 10px;}
+.prod-info{margin:0 0 18px;font-size:16px;line-height:1.6;}
+.preis{font-size:21px;margin:0 0 2px;color:var(--anthrazit);} /* Preise immer in Textfarbe, nie Terrakotta */
+.preishinweis{font-size:var(--t-small);color:var(--salbei);margin:0 0 24px;}
+.prod-karte .knopf{margin-top:auto;text-align:center;}
+
+/* ---------- Editorial ---------- */
+.editorial{background:var(--flaeche);color:var(--anthrazit);text-align:center;}
+.editorial .label{color:var(--salbei);}
+.editorial h2{font-size:var(--t-xl);margin:0 auto 32px;max-width:20ch;}
+.editorial .fliesstext{max-width:58ch;margin:0 auto;text-align:left;}
+.editorial p.ende{margin-top:40px;}
+
+/* ---------- Service ---------- */
+.service-raster{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,5vw,72px);}
+.service-punkt h3{font-size:20px;margin:0 0 10px;}
+.service-punkt p{margin:0;font-size:16px;color:var(--salbei);line-height:1.6;}
+
+/* ---------- Fußbereich ---------- */
+.fuss{padding-top:clamp(52px,8vw,92px);}
+.fuss-raster{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(24px,4vw,60px);
+  max-width:1240px;margin:0 auto;padding:0 var(--rand);
+}
+.fuss h3{
+  font-family:var(--sans);font-size:var(--t-label);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--salbei);margin:0 0 18px;
+}
+.fuss ul{list-style:none;margin:0;padding:0;}
+.fuss li{margin-bottom:10px;font-size:16px;}
+.fuss li a{color:var(--anthrazit);text-decoration:none;}
+.fuss li a:hover{color:var(--terrakotta);text-decoration:underline;text-underline-offset:4px;}
+
+.riesenmarke{margin:clamp(40px,6vw,72px) var(--rand) 0;display:flex;justify-content:center;}
+.riesenmarke img{width:clamp(160px,18vw,240px);}
+
+.fuss-schluss{
+  border-top:1px solid rgba(61,92,75,.25);
+  margin:26px var(--rand) 0;padding:20px 0 30px;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  font-size:var(--t-small);color:var(--salbei);
+}
+.fuss-schluss .unterzeile{letter-spacing:.14em;}
+/* dezenter Hinweis: Salbeigrün auf #FAFAF7 ≈ 7,1 : 1 */
+.ki-hinweis{color:var(--salbei);}
+
+/* ---------- Unterseiten (Über uns, Impressum, Datenschutz) ---------- */
+.unterseite{padding:clamp(48px,7vw,110px) 0 clamp(60px,9vw,130px);}
+.seitenkopf{text-align:center;margin-bottom:clamp(32px,5vw,64px);}
+.seitenkopf h1{font-size:var(--t-xl);margin:0 auto;max-width:20ch;}
+.seitenbild{margin:0 0 clamp(36px,5vw,72px);}
+.seitenbild img{
+  width:100%;aspect-ratio:3/1;object-fit:cover;object-position:left center;
+  background:var(--flaeche);
+}
+.textspalte{max-width:58ch;margin:0 auto;}
+.textspalte p{margin:0 0 1.2em;}
+.unterseite .ende{text-align:center;margin:clamp(32px,4vw,48px) 0 0;}
+/* Textlink mit ausreichend großer Tippfläche */
+.textlink{display:inline-flex;align-items:center;min-height:44px;text-underline-offset:4px;}
+.textlink:hover{color:var(--anthrazit);}
+
+/* ==========================================================
+   Shop: Kategorie-, Produkt- und Warenkorbseite (js/shop.js)
+   ========================================================== */
+/* Links in Produktkacheln: Name in Textfarbe, Unterstreichung erst beim Darüberfahren */
+.bild-link{display:block;}
+.prod-name{font-size:22px;margin:0 0 10px;}
+.prod-name a{color:var(--anthrazit);text-decoration:none;}
+.prod-name a:hover{text-decoration:underline;text-underline-offset:4px;}
+.prod-karte .bild-link + .prod-name{margin-top:22px;}
+.prod-farben{font-size:var(--t-small);color:var(--salbei);margin:0 0 14px;}
+.kauf-status{font-size:var(--t-small);margin:10px 0 0;min-height:1.7em;}
+.kauf-status:empty{margin:0;min-height:0;}
+
+.seitenkopf-text{color:var(--salbei);max-width:46ch;margin:14px auto 0;text-wrap:balance;}
+
+/* Kategorieseite: Preis und Button in allen Karten einer Reihe auf gleicher Höhe.
+   Die Karte ist eine Flex-Spalte; der Preis schiebt sich mit allem darunter nach unten.
+   Platz für die Rückmeldung unter dem Button ist immer reserviert (2 Zeilen),
+   damit eine Meldung in einer Karte die anderen nicht verschiebt. */
+#produktliste .prod-karte .preis{margin-top:auto;}
+#produktliste .prod-karte .knopf{margin-top:0;}
+#produktliste .kauf-status,#produktliste .kauf-status:empty{min-height:3.4em;margin:10px 0 0;} /* 2 Zeilen × 1,7 */
+
+/* Produktdetail */
+.zurueck-zeile{margin:0 0 clamp(16px,3vw,32px);}
+.produkt-detail{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  gap:clamp(32px,5vw,80px);align-items:start;
+}
+.produkt-bild .kachelbild-rahmen{aspect-ratio:auto;}   /* Detailbild unbeschnitten zeigen */
+.produkt-bild .kachelbild{height:auto;}
+.bild-hinweis{font-size:var(--t-small);color:var(--salbei);margin:12px 0 0;}
+.produkt-info .prod-kategorie{margin:0 0 12px;}
+.produkt-info .prod-kategorie a{color:var(--salbei);text-decoration:none;}
+.produkt-info .prod-kategorie a:hover{text-decoration:underline;text-underline-offset:4px;}
+.produkt-info h1{font-size:var(--t-xl);margin:0 0 18px;}
+.produkt-info .preis{font-size:28px;}
+.produkt-text{margin:0 0 28px;}
+
+.farbwahl{border:0;padding:0;margin:0 0 24px;min-width:0;}
+.farbwahl legend{padding:0;margin:0 0 10px;font-size:16px;}
+.farbfelder{display:flex;gap:10px;flex-wrap:wrap;}
+.farbfeld{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:48px;height:48px;cursor:pointer;
+}
+.farbfeld input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer;}
+.farbpunkt{
+  width:34px;height:34px;border-radius:50%;background:var(--farbe);
+  border:1px solid rgba(22,22,22,.45);
+}
+/* gewählte Farbe: Ring in Textfarbe (keine Handlung → kein Terrakotta) */
+.farbfeld input:checked + .farbpunkt{outline:2px solid var(--anthrazit);outline-offset:4px;}
+.farbfeld input:focus-visible + .farbpunkt{outline:2px solid var(--terrakotta);outline-offset:4px;}
+
+.kaufzeile{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;}
+.mengenfeld label{display:block;font-size:var(--t-small);color:var(--salbei);margin:0 0 6px;}
+.mengenfeld input{
+  width:88px;min-height:48px;padding:0 10px;
+  font:inherit;font-size:17px;color:var(--anthrazit);
+  background:var(--weiss);border:1px solid var(--salbei);
+}
+.mengenfeld input:focus-visible{outline:2px solid var(--terrakotta);outline-offset:2px;}
+.kaufzeile .knopf{min-height:48px;}
+.knopf:disabled{background:var(--flaeche);border-color:var(--flaeche);color:var(--salbei);cursor:not-allowed;}
+
+.eckdaten{
+  display:grid;grid-template-columns:auto 1fr;gap:6px 24px;
+  margin:28px 0 0;padding-top:20px;border-top:1px solid rgba(61,92,75,.25);font-size:16px;
+}
+.eckdaten dt{color:var(--salbei);}
+.eckdaten dd{margin:0;}
+
+/* Warenkorb */
+.wk-status{max-width:58ch;margin:0 auto 16px;text-align:center;font-size:16px;min-height:1.7em;}
+.wk-leer{text-align:center;margin:0;}
+.wk-liste{list-style:none;margin:0;padding:0;border-top:1px solid rgba(61,92,75,.25);}
+.wk-posten{
+  display:grid;grid-template-columns:132px minmax(0,1fr) auto 8.5em auto;
+  grid-template-areas:"bild text menge summe entfernen";
+  gap:16px 28px;align-items:center;
+  padding:22px 0;border-bottom:1px solid rgba(61,92,75,.25);
+}
+.wk-bild{grid-area:bild;}
+.wk-text{grid-area:text;}
+.wk-menge{grid-area:menge;}
+.wk-zeilensumme{grid-area:summe;text-align:right;margin:0;font-size:21px;}
+.wk-entfernen{grid-area:entfernen;}
+.wk-name{font-size:21px;margin:0 0 6px;}
+.wk-name a{color:var(--anthrazit);text-decoration:none;}
+.wk-name a:hover{text-decoration:underline;text-underline-offset:4px;}
+.wk-meta{font-size:var(--t-small);color:var(--salbei);margin:0 0 2px;}
+.wk-einzel{font-size:16px;margin:0;}
+
+.textknopf{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 4px;
+  background:none;border:0;cursor:pointer;
+  font:inherit;font-size:16px;color:var(--terrakotta);
+  text-decoration:underline;text-underline-offset:4px;
+}
+.textknopf:hover{color:var(--anthrazit);}
+
+.wk-summen{max-width:500px;margin:32px 0 0 auto;}
+.wk-summen dl{display:grid;grid-template-columns:1fr auto;gap:8px 24px;margin:0 0 10px;}
+.wk-summen dt{color:var(--salbei);font-size:16px;}
+.wk-summen dd{margin:0;text-align:right;font-size:16px;}
+.wk-summen dd.gesamt{font-family:var(--serif);font-size:24px;color:var(--anthrazit);}
+.demo-box{background:var(--flaeche);padding:14px 18px;font-size:16px;margin:18px 0 0;}
+.wk-aktionen{text-align:right;margin:24px 0 0;}
+
+/* ---------- Schmale Bildschirme ---------- */
+@media (max-width:900px){
+  .kopf-zeile{justify-content:center;text-align:center;}
+  .navi ul{justify-content:center;}
+  .start{
+    align-items:flex-end;
+    background-position:right top;
+    min-height:560px;
+  }
+  .start-text{max-width:none;background:var(--creme);padding:24px;}
+  .kat-raster,.prod-raster{grid-template-columns:repeat(2,1fr);}
+  .fuss-raster{grid-template-columns:1fr 1fr;}
+
+  /* Tippflächen mindestens 44 px hoch */
+  .navi a,.warenkorb,.fuss li a{display:inline-flex;align-items:center;min-height:44px;}
+  .logo{display:flex;align-items:center;min-height:44px;}
+  .fuss li{margin-bottom:0;}
+
+  /* ----- Handy-Menü (nur wenn JavaScript läuft, Klasse "js" am <html>) ----- */
+  .js .kopf-zeile{
+    display:grid;grid-template-columns:auto auto;
+    justify-content:space-between;align-items:center;
+    gap:18px 16px;
+  }
+  .js .logo{grid-column:1 / -1;justify-self:center;}
+
+  .js .menue-knopf{
+    display:inline-flex;align-items:center;gap:10px;
+    min-height:44px;padding:0 18px;
+    background:none;border:1px solid var(--terrakotta);color:var(--terrakotta);
+    font-family:var(--sans);font-size:var(--t-label);
+    letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
+    transition:background-color .25s ease,color .25s ease;
+  }
+  .js .menue-knopf:hover{background:var(--terrakotta);color:var(--weiss);}
+  /* kleiner Pfeil, der sich beim Aufklappen dreht */
+  .js .menue-knopf::after{
+    content:"";width:6px;height:6px;
+    border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;
+    transform:translateY(-2px) rotate(45deg);transition:transform .25s ease;
+  }
+  .js .menue-knopf[aria-expanded="true"]::after{transform:translateY(2px) rotate(-135deg);}
+
+  .js .warenkorb{justify-self:end;}
+
+  /* Navigation: zugeklappt, bis "Menü" angetippt wird */
+  .js .navi{display:none;grid-column:1 / -1;order:3;}
+  .js .navi.offen{display:block;}
+  .js .navi ul{flex-direction:column;gap:0;border-top:1px solid rgba(61,92,75,.25);}
+  .js .navi li{border-bottom:1px solid rgba(61,92,75,.25);}
+  .js .navi a{display:flex;justify-content:center;min-height:48px;padding:0;border-bottom:0;}
+  .js .navi a:hover{color:var(--terrakotta);}
+}
+@media (max-width:560px){
+  .kat-raster,.prod-raster,.service-raster,.fuss-raster{grid-template-columns:1fr;}
+  /* Bild auf "Über uns": am Handy höher zuschneiden, Notizbuch und Füller bleiben sichtbar */
+  .seitenbild img{aspect-ratio:4/3;}
+}
+@media (max-width:900px){
+  .produkt-detail{grid-template-columns:1fr;}
+  /* Tippflächen ≥ 44 px: unsichtbarer Innenabstand, negativer Außenabstand gleicht ihn aus (nichts verschiebt sich) */
+  .prod-name a{display:inline-block;padding:10px 0;margin:-10px 0;}
+  .produkt-info .prod-kategorie a{display:inline-block;padding:14px 0;margin:-14px 0;}
+}
+@media (max-width:700px){
+  /* Warenkorb am Handy: Bild + Text, darunter Menge und Summe, dann "Entfernen" */
+  .wk-posten{
+    grid-template-columns:88px minmax(0,1fr);
+    grid-template-areas:"bild text" "menge summe" "entfernen entfernen";
+    gap:12px 16px;
+  }
+  .wk-zeilensumme{align-self:end;}
+  .wk-summen{max-width:none;margin-left:0;}
+  .wk-aktionen{text-align:left;}
+}

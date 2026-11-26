@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>studio.leerzeile – Papier. Ideen. Lieblingsstücke.</title>
+<style>
+  :root{
+    --creme:#FAFAF7;          /* Hintergrund, fast Weiß */
+    --anthrazit:#161616;      /* Text */
+    --terrakotta:#B8441F;     /* Akzent: nur für Handlungen */
+    --salbei:#3D5C4B;         /* Labels, Linien, leise Texte */
+    --flaeche:#E7ECE5;        /* Flächen und Kacheln: zartes Salbei */
+    --weiss:#FFFFFF;
+
+    --t-hero:clamp(34px, 5vw, 66px);
+    --t-xl:clamp(28px, 4vw, 46px);
+    --t-body:17px;
+    --t-small:14px;
+    --t-label:12px;
+
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+    --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+
+    --rand:clamp(20px, 5vw, 72px);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+
+  body{
+    margin:0;
+    background:var(--creme);
+    color:var(--anthrazit);
+    font-family:var(--sans);
+    font-size:var(--t-body);
+    line-height:1.7;
+  }
+
+  h1,h2,h3,.preis{font-family:var(--serif);font-weight:400;line-height:1.15;}
+  a{color:var(--terrakotta);}
+  img{display:block;max-width:100%;height:auto;}
+
+  a:focus-visible,button:focus-visible{outline:2px solid var(--terrakotta);outline-offset:4px;}
+
+  .inhalt{max-width:1240px;margin:0 auto;padding:0 var(--rand);}
+
+  .sprungmarke{
+    position:absolute;left:-9999px;
+    background:var(--anthrazit);color:var(--creme);padding:10px 16px;z-index:20;
+  }
+  .sprungmarke:focus{left:16px;top:8px;}
+
+  /* kleines, weit gesperrtes Label */
+  .label{
+    font-size:var(--t-label);letter-spacing:.28em;text-transform:uppercase;
+    color:var(--salbei);margin:0 0 22px;
+  }
+  .label.zentriert{text-align:center;}
+
+  /* Funktions-Button: gefüllt, löst eine Handlung aus */
+  .knopf{
+    display:inline-block;background:var(--terrakotta);
+    border:1px solid var(--terrakotta);color:var(--weiss);
+    font-family:var(--sans);font-size:var(--t-label);
+    letter-spacing:.2em;text-transform:uppercase;text-decoration:none;
+    padding:15px 34px;cursor:pointer;
+    transition:background-color .25s ease,color .25s ease;
+  }
+  .knopf:hover{background:var(--anthrazit);border-color:var(--anthrazit);color:var(--weiss);}
+  /* Nebenaktion: umrandet, führt nur weiter */
+  .knopf.hell{background:none;border-color:var(--terrakotta);color:var(--terrakotta);}
+  .knopf.hell:hover{background:var(--terrakotta);color:var(--weiss);}
+
+  /* ---------- Demo-Hinweis ---------- */
+  .demohinweis{
+    background:var(--anthrazit);color:var(--creme);
+    font-size:var(--t-label);letter-spacing:.2em;text-transform:uppercase;
+    text-align:center;padding:10px 16px;margin:0;
+  }
+
+  /* ---------- Kopfbereich ---------- */
+  .kopf{padding:22px var(--rand);}
+  .kopf-zeile{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:clamp(16px,3vw,48px);flex-wrap:wrap;
+  }
+  .logo img{width:clamp(180px,20vw,250px);}
+  .navi ul{display:flex;gap:clamp(14px,2vw,32px);list-style:none;margin:0;padding:0;flex-wrap:wrap;}
+  .navi a,.warenkorb{
+    font-size:var(--t-label);letter-spacing:.18em;text-transform:uppercase;text-decoration:none;
+  }
+  .navi a{color:var(--anthrazit);padding-bottom:2px;border-bottom:1px solid transparent;}
+  .navi a:hover{border-bottom-color:var(--terrakotta);}
+  .warenkorb{color:var(--terrakotta);white-space:nowrap;}
+  .warenkorb:hover{text-decoration:underline;text-underline-offset:4px;}
+
+  /* ---------- Startbereich: randlos, Text im Bild ---------- */
+  .start{
+    min-height:clamp(360px,34vw,620px);
+    background-image:url("../Bilder/studio_leerzeile_hero_02_weisser_fueller.png");
+    background-size:cover;
+    background-position:right center;
+    background-repeat:no-repeat;
+    background-color:var(--flaeche);
+    display:flex;align-items:center;
+    padding:clamp(48px,7vw,96px) var(--rand);
+  }
+  .start-text{max-width:30ch;}
+  .start h1{
+    font-size:var(--t-hero);letter-spacing:-.01em;
+    margin:0 0 22px;
+  }
+  .start p{margin:0 0 34px;max-width:28ch;}
+
+  /* ---------- Abschnitte ---------- */
+  section{padding:clamp(60px,9vw,130px) 0;}
+  .abschnittskopf{text-align:center;margin-bottom:clamp(36px,5vw,72px);}
+  .abschnittskopf h2{font-size:var(--t-xl);margin:0 auto 14px;max-width:18ch;}
+  .abschnittskopf p{margin:0 auto;color:var(--salbei);max-width:46ch;}
+
+  /* Bildfläche ohne Rahmen */
+  .flaeche{
+    aspect-ratio:4/5;background:var(--flaeche);
+    display:flex;align-items:center;justify-content:center;
+    text-align:center;padding:16px;color:var(--salbei);
+    font-size:var(--t-label);letter-spacing:.2em;text-transform:uppercase;
+    transition:opacity .25s ease;
+  }
+
+  /* ---------- Kategorien ---------- */
+  .kat-raster{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,3vw,44px);}
+  .kat-karte{text-decoration:none;color:var(--anthrazit);display:block;}
+  .kat-karte .flaeche{aspect-ratio:3/4;}
+  .kat-karte:hover .flaeche{opacity:.78;}
+  .kat-karte h3{font-size:21px;margin:20px 0 4px;}
+  .kat-karte span{font-size:var(--t-small);color:var(--salbei);}
+
+  /* ---------- Produkte ---------- */
+  .prod-raster{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(22px,4vw,56px);}
+  .prod-karte{display:flex;flex-direction:column;}
+  .prod-karte:hover .flaeche{opacity:.78;}
+  .prod-kategorie{
+    font-size:var(--t-label);letter-spacing:.2em;text-transform:uppercase;
+    color:var(--salbei);margin:22px 0 8px;
+  }
+  .prod-karte h3{font-size:22px;margin:0 0 10px;}
+  .prod-info{margin:0 0 18px;font-size:16px;line-height:1.6;}
+  .preis{font-size:21px;margin:0 0 2px;}
+  .preishinweis{font-size:var(--t-small);color:var(--salbei);margin:0 0 24px;}
+  .prod-karte .knopf{margin-top:auto;text-align:center;}
+
+  /* ---------- Editorial ---------- */
+  .editorial{background:var(--flaeche);color:var(--anthrazit);text-align:center;}
+  .editorial .label{color:var(--salbei);}
+  .editorial h2{font-size:var(--t-xl);margin:0 auto 32px;max-width:20ch;}
+  .editorial .fliesstext{max-width:58ch;margin:0 auto;text-align:left;}
+  .editorial p.ende{margin-top:40px;}
+
+  /* ---------- Service ---------- */
+  .service-raster{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,5vw,72px);}
+  .service-punkt h3{font-size:20px;margin:0 0 10px;}
+  .service-punkt p{margin:0;font-size:16px;color:var(--salbei);line-height:1.6;}
+
+  /* ---------- Fußbereich ---------- */
+  .fuss{padding-top:clamp(52px,8vw,92px);}
+  .fuss-raster{
+    display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(24px,4vw,60px);
+    max-width:1240px;margin:0 auto;padding:0 var(--rand);
+  }
+  .fuss h3{
+    font-family:var(--sans);font-size:var(--t-label);letter-spacing:.2em;
+    text-transform:uppercase;color:var(--salbei);margin:0 0 18px;
+  }
+  .fuss ul{list-style:none;margin:0;padding:0;}
+  .fuss li{margin-bottom:10px;font-size:16px;}
+  .fuss li a{color:var(--anthrazit);text-decoration:none;}
+  .fuss li a:hover{color:var(--terrakotta);text-decoration:underline;text-underline-offset:4px;}
+
+  .riesenmarke{margin:clamp(40px,6vw,72px) var(--rand) 0;display:flex;justify-content:center;}
+  .riesenmarke img{width:clamp(160px,18vw,240px);}
+
+  .fuss-schluss{
+    border-top:1px solid rgba(61,92,75,.25);
+    margin:26px var(--rand) 0;padding:20px 0 30px;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    font-size:var(--t-small);color:var(--salbei);
+  }
+  .fuss-schluss .unterzeile{letter-spacing:.14em;}
+
+  /* ---------- Schmale Bildschirme ---------- */
+  @media (max-width:900px){
+    .kopf-zeile{justify-content:center;text-align:center;}
+    .navi ul{justify-content:center;}
+    .start{
+      align-items:flex-end;
+      background-position:right top;
+      min-height:560px;
+    }
+    .start-text{max-width:none;background:var(--creme);padding:24px;}
+    .kat-raster,.prod-raster{grid-template-columns:repeat(2,1fr);}
+    .fuss-raster{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:560px){
+    .kat-raster,.prod-raster,.service-raster,.fuss-raster{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<a class="sprungmarke" href="#inhalt">Direkt zum Inhalt</a>
+
+<p class="demohinweis">Demo-Shop: keine echten Bestellungen</p>
+
+<!-- ===== Kopfbereich ===== -->
+<header class="kopf">
+  <div class="kopf-zeile">
+    <a class="logo" href="#">
+      <img src="../Logo/studio-leerzeile-logo-kurz-transparent.png" alt="studio.leerzeile – Startseite">
+    </a>
+
+    <nav class="navi" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#">Schreiben</a></li>
+        <li><a href="#">Notieren &amp; Planen</a></li>
+        <li><a href="#">Ordnen &amp; Aufbewahren</a></li>
+        <li><a href="#">Sets &amp; Geschenke</a></li>
+      </ul>
+    </nav>
+
+    <a class="warenkorb" href="#">Warenkorb (0)</a>
+  </div>
+</header>
+
+<main id="inhalt">
+
+  <!-- ===== Startbereich ===== -->
+  <section class="start">
+    <div class="start-text">
+      <h1>Papier. Ideen. Lieblingsstücke.</h1>
+      <p>Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</p>
+      <a class="knopf" href="#bestseller">Zur Kollektion</a>
+    </div>
+  </section>
+
+  <!-- ===== Kategorien ===== -->
+  <section aria-labelledby="kat-titel">
+    <div class="inhalt">
+      <div class="abschnittskopf">
+        <p class="label zentriert">· Sortiment</p>
+        <h2 id="kat-titel">Vier Bereiche, ein Arbeitsplatz</h2>
+        <p>Ausgewählt statt vollgestellt – zwölf Stücke, mehr nicht.</p>
+      </div>
+
+      <div class="kat-raster">
+        <a class="kat-karte" href="#">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Schreibgeräte">Bild folgt</div>
+          <h3>Schreiben</h3>
+          <span>4 Produkte</span>
+        </a>
+        <a class="kat-karte" href="#">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Notizbücher und Planer">Bild folgt</div>
+          <h3>Notieren &amp; Planen</h3>
+          <span>4 Produkte</span>
+        </a>
+        <a class="kat-karte" href="#">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Mappen und Ordner">Bild folgt</div>
+          <h3>Ordnen &amp; Aufbewahren</h3>
+          <span>2 Produkte</span>
+        </a>
+        <a class="kat-karte" href="#">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Geschenksets">Bild folgt</div>
+          <h3>Sets &amp; Geschenke</h3>
+          <span>2 Produkte</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Bestseller ===== -->
+  <section id="bestseller" aria-labelledby="best-titel">
+    <div class="inhalt">
+      <div class="abschnittskopf">
+        <p class="label zentriert">· Bestseller</p>
+        <h2 id="best-titel">Unsere Lieblingsstücke</h2>
+        <p>Vier Stücke, die am häufigsten den Schreibtisch wechseln.</p>
+      </div>
+
+      <div class="prod-raster">
+
+        <article class="prod-karte">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Füllfederhalter Signature">Produktbild folgt</div>
+          <p class="prod-kategorie">Schreiben</p>
+          <h3>Füllfederhalter „Signature“</h3>
+          <p class="prod-info">Gebürstetes Metall, Feder M, ausgewogen in der Hand.</p>
+          <p class="preis">59,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+        <article class="prod-karte">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Notizbuch A5 Gedankenraum">Produktbild folgt</div>
+          <p class="prod-kategorie">Notieren &amp; Planen</p>
+          <h3>Notizbuch A5 „Gedankenraum“</h3>
+          <p class="prod-info">Leinenrücken, 192 Seiten, cremefarbenes Papier, punktiert.</p>
+          <p class="preis">18,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+        <article class="prod-karte">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Dokumentenmappe Classy">Produktbild folgt</div>
+          <p class="prod-kategorie">Ordnen &amp; Aufbewahren</p>
+          <h3>Dokumentenmappe „Classy“</h3>
+          <p class="prod-info">Für A4, zwei Innenfächer, flach genug für die Tasche.</p>
+          <p class="preis">29,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+        <article class="prod-karte">
+          <div class="flaeche" role="img" aria-label="Platzhalter: Produktfoto Schreibset First Words">Produktbild folgt</div>
+          <p class="prod-kategorie">Sets &amp; Geschenke</p>
+          <h3>Schreibset „First Words“</h3>
+          <p class="prod-info">Rollerball, Notizbuch und Etui in einer Geschenkhülle.</p>
+          <p class="preis">69,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Über uns ===== -->
+  <section class="editorial" aria-labelledby="edi-titel">
+    <div class="inhalt">
+      <p class="label zentriert">· Über uns</p>
+      <h2 id="edi-titel">Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</h2>
+
+      <div class="fliesstext">
+        <p>
+          studio.leerzeile ist kein Bürobedarf, sondern eine kleine Papeterie:
+          Wir suchen Stücke aus, die lange halten und beim Benutzen besser werden –
+          Papier, das die Tinte trägt, Metall, das warm wird in der Hand.
+        </p>
+        <p>
+          Jedes Produkt prüfen wir, bevor es ins Sortiment kommt. Was uns nicht
+          überzeugt, nehmen wir nicht auf. Deshalb sind es zwölf Stücke und nicht
+          zwölfhundert.
+        </p>
+      </div>
+
+      <p class="ende"><a class="knopf hell" href="#">Mehr über uns</a></p>
+    </div>
+  </section>
+
+  <!-- ===== Service ===== -->
+  <section aria-labelledby="serv-titel">
+    <div class="inhalt">
+      <div class="abschnittskopf">
+        <p class="label zentriert">· Service</p>
+        <h2 id="serv-titel">Gut aufgehoben</h2>
+      </div>
+
+      <div class="service-raster">
+        <div class="service-punkt">
+          <h3>Versand</h3>
+          <p>Versandkostenfrei ab 50 €, Lieferung in zwei bis vier Werktagen.</p>
+        </div>
+        <div class="service-punkt">
+          <h3>Rückgabe</h3>
+          <p>30 Tage Rückgaberecht, ungeöffnet und in der Originalhülle.</p>
+        </div>
+        <div class="service-punkt">
+          <h3>Kontakt</h3>
+          <p>Montag bis Freitag von 9 bis 16 Uhr, per E-Mail und telefonisch.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== Fußbereich ===== -->
+<footer class="fuss">
+  <div class="fuss-raster">
+    <div>
+      <h3>Sortiment</h3>
+      <ul>
+        <li><a href="#">Schreiben</a></li>
+        <li><a href="#">Notieren &amp; Planen</a></li>
+        <li><a href="#">Ordnen &amp; Aufbewahren</a></li>
+        <li><a href="#">Sets &amp; Geschenke</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Service</h3>
+      <ul>
+        <li><a href="#">Versand</a></li>
+        <li><a href="#">Rückgabe</a></li>
+        <li><a href="#">Kontakt</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Rechtliches</h3>
+      <ul>
+        <li><a href="#">Impressum (Platzhalter)</a></li>
+        <li><a href="#">Datenschutzerklärung (Platzhalter)</a></li>
+        <li><a href="#">AGB (Platzhalter)</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="riesenmarke">
+    <img src="../Logo/studio-leerzeile-logo-kurz-transparent.png" alt="" aria-hidden="true">
+  </div>
+
+  <div class="fuss-schluss">
+    <span class="unterzeile">papier. ideen. lieblingsstücke.</span>
+    <span>Demo-Shop der KI-Manager-Weiterbildung – alle Produkte, Preise und Firmendaten sind erfunden.</span>
+    <span>© 2026 studio.leerzeile</span>
+  </div>
+</footer>
+
+</body>
+</html>

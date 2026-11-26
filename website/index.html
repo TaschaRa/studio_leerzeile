@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>studio.leerzeile – Papier. Ideen. Lieblingsstücke.</title>
+<link rel="stylesheet" href="css/style.css">
+<script src="js/app.js"></script>
+</head>
+<body data-seite="start">
+
+<a class="sprungmarke" href="#inhalt">Direkt zum Inhalt</a>
+
+<p class="demohinweis">Demo-Shop: keine echten Bestellungen</p>
+
+<!-- ===== Kopfbereich ===== -->
+<header class="kopf">
+  <div class="kopf-zeile">
+    <a class="logo" href="#">
+      <img src="../Logo/studio-leerzeile-logo-kurz-transparent.png" alt="studio.leerzeile – Startseite">
+    </a>
+
+    <!-- nur am Handy sichtbar (und nur mit JavaScript): klappt die Navigation auf und zu -->
+    <button class="menue-knopf" type="button" aria-expanded="false" aria-controls="hauptnavigation">Menü</button>
+
+    <nav class="navi" id="hauptnavigation" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="kategorie.html?id=SCH">Schreiben</a></li>
+        <li><a href="kategorie.html?id=NP">Notieren &amp; Planen</a></li>
+        <li><a href="kategorie.html?id=OA">Ordnen &amp; Aufbewahren</a></li>
+        <li><a href="kategorie.html?id=SG">Sets &amp; Geschenke</a></li>
+      </ul>
+    </nav>
+
+    <a class="warenkorb" href="warenkorb.html">Warenkorb (0)</a>
+  </div>
+</header>
+
+<main id="inhalt">
+
+  <!-- ===== Startbereich ===== -->
+  <section class="start">
+    <div class="start-text">
+      <h1>Papier. Ideen. Lieblingsstücke.</h1>
+      <p>Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</p>
+      <a class="knopf" href="#bestseller">Zur Kollektion</a>
+    </div>
+  </section>
+
+  <!-- ===== Kategorien ===== -->
+  <section aria-labelledby="kat-titel">
+    <div class="inhalt">
+      <div class="abschnittskopf">
+        <p class="label zentriert">· Sortiment</p>
+        <h2 id="kat-titel">Vier Bereiche, ein Arbeitsplatz</h2>
+        <p>Ausgewählt statt vollgestellt – zwölf Stücke, mehr nicht.</p>
+      </div>
+
+      <div class="kat-raster">
+        <!-- Produktanzahl wird beim Laden aus data/shopdaten.js gesetzt (js/shop.js) -->
+        <a class="kat-karte" href="kategorie.html?id=SCH" data-kategorie="SCH">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-mitte" src="../Bilder/kategorien-zugeschnitten/sch.png" width="584" height="412" loading="lazy"
+                 alt="Weißer Füllfederhalter mit goldener Feder">
+          </div>
+          <h3>Schreiben</h3>
+          <span class="kat-anzahl">4 Produkte</span>
+        </a>
+        <a class="kat-karte" href="kategorie.html?id=NP" data-kategorie="NP">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-notizbuch" src="../Bilder/kategorien-zugeschnitten/np.png" width="795" height="433" loading="lazy"
+                 alt="Helles Notizbuch mit Leineneinband und terrakottafarbenem Gummiband">
+          </div>
+          <h3>Notieren &amp; Planen</h3>
+          <span class="kat-anzahl">4 Produkte</span>
+        </a>
+        <a class="kat-karte" href="kategorie.html?id=OA" data-kategorie="OA">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-unten" src="../Bilder/kategorien-zugeschnitten/oa.png" width="715" height="605" loading="lazy"
+                 alt="Cremefarbene Dokumentenmappe mit goldenem Druckknopf">
+          </div>
+          <h3>Ordnen &amp; Aufbewahren</h3>
+          <span class="kat-anzahl">2 Produkte</span>
+        </a>
+        <a class="kat-karte" href="kategorie.html?id=SG" data-kategorie="SG">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-unten" src="../Bilder/kategorien-zugeschnitten/sg.png" width="709" height="607" loading="lazy"
+                 alt="Geschenkbox mit Etui, Stift und Notizbuch">
+          </div>
+          <h3>Sets &amp; Geschenke</h3>
+          <span class="kat-anzahl">2 Produkte</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Bestseller ===== -->
+  <section id="bestseller" aria-labelledby="best-titel">
+    <div class="inhalt">
+      <div class="abschnittskopf">
+        <p class="label zentriert">· Bestseller</p>
+        <h2 id="best-titel">Unsere Lieblingsstücke</h2>
+        <p>Vier Stücke, die am häufigsten den Schreibtisch wechseln.</p>
+      </div>
+
+      <div class="prod-raster">
+
+        <article class="prod-karte" data-produkt="ST-SCH-001">
+          <a class="bild-link" href="produkt.html?id=ST-SCH-001">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-mitte" src="../Bilder/produkte-zugeschnitten/ST-SCH-001.png" width="892" height="464" loading="lazy"
+                 alt="Weißer Füllfederhalter „Signature“ mit goldener Feder in Nahaufnahme">
+          </div>
+          </a>
+          <p class="prod-kategorie">Schreiben</p>
+          <h3 class="prod-name"><a href="produkt.html?id=ST-SCH-001">Füllfederhalter „Signature“</a></h3>
+          <p class="prod-info">Elfenbeinfarbenes Gehäuse, goldfarbene Feder, Federstärke M.</p>
+          <p class="preis">59,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+        <article class="prod-karte" data-produkt="ST-NP-001">
+          <a class="bild-link" href="produkt.html?id=ST-NP-001">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-notizbuch" src="../Bilder/produkte-zugeschnitten/ST-NP-001.png" width="897" height="486" loading="lazy"
+                 alt="Notizbuch A5 „Gedankenraum“ mit hellem Leineneinband und terrakottafarbenem Gummiband">
+          </div>
+          </a>
+          <p class="prod-kategorie">Notieren &amp; Planen</p>
+          <h3 class="prod-name"><a href="produkt.html?id=ST-NP-001">Notizbuch A5 „Gedankenraum“</a></h3>
+          <p class="prod-info">Leinenrücken, 192 Seiten, cremefarbenes Papier, punktiert.</p>
+          <p class="preis">18,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+        <article class="prod-karte" data-produkt="ST-OA-001">
+          <a class="bild-link" href="produkt.html?id=ST-OA-001">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-unten" src="../Bilder/produkte-zugeschnitten/ST-OA-001.png" width="805" height="680" loading="lazy"
+                 alt="Dokumentenmappe „Classy“ in Creme mit goldenem Druckknopf">
+          </div>
+          </a>
+          <p class="prod-kategorie">Ordnen &amp; Aufbewahren</p>
+          <h3 class="prod-name"><a href="produkt.html?id=ST-OA-001">Dokumentenmappe „Classy“</a></h3>
+          <p class="prod-info">Für A4, zwei Innenfächer, flach genug für die Tasche.</p>
+          <p class="preis">29,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+        <article class="prod-karte" data-produkt="ST-SG-001">
+          <a class="bild-link" href="produkt.html?id=ST-SG-001">
+          <div class="kachelbild-rahmen">
+            <img class="kachelbild ausschnitt-unten" src="../Bilder/produkte-zugeschnitten/ST-SG-001.png" width="799" height="682" loading="lazy"
+                 alt="Schreibset „First Words“: terrakottafarbenes Etui, weißer Rollerball und helles Notizbuch in einer Geschenkbox">
+          </div>
+          </a>
+          <p class="prod-kategorie">Sets &amp; Geschenke</p>
+          <h3 class="prod-name"><a href="produkt.html?id=ST-SG-001">Schreibset „First Words“</a></h3>
+          <p class="prod-info">Rollerball, Notizbuch und Etui in einer Geschenkbox.</p>
+          <p class="preis">69,90 €</p>
+          <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
+          <button class="knopf" type="button">In den Warenkorb</button>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Über uns ===== -->
+  <section class="editorial" aria-labelledby="edi-titel">
+    <div class="inhalt">
+      <p class="label zentriert">· Über uns</p>
+      <h2 id="edi-titel">Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</h2>
+
+      <div class="fliesstext">
+        <p>
+          studio.leerzeile ist kein Bürobedarf, sondern eine kleine Papeterie:
+          Wir suchen Stücke aus, die lange halten und beim Benutzen besser werden –
+          Papier, das die Tinte trägt, Metall, das warm wird in der Hand.
+        </p>
+        <p>
+          Jedes Produkt prüfen wir, bevor es ins Sortiment kommt. Was uns nicht
+          überzeugt, nehmen wir nicht auf. Deshalb sind es zwölf Stücke und nicht
+          zwölfhundert.
+        </p>
+      </div>
+
+      <p class="ende"><a class="knopf hell" href="ueber-uns.html">Mehr über uns</a></p>
+    </div>
+  </section>
+
+  <!-- ===== Service ===== -->
+  <section aria-labelledby="serv-titel">
+    <div class="inhalt">
+      <div class="abschnittskopf">
+        <p class="label zentriert">· Service</p>
+        <h2 id="serv-titel">Gut aufgehoben</h2>
+      </div>
+
+      <div class="service-raster">
+        <div class="service-punkt">
+          <h3>Versand</h3>
+          <p>Versandkostenfrei ab 50 €, Lieferung in zwei bis vier Werktagen.</p>
+        </div>
+        <div class="service-punkt">
+          <h3>Rückgabe</h3>
+          <p>30 Tage Rückgaberecht, ungeöffnet und in der Originalhülle.</p>
+        </div>
+        <div class="service-punkt">
+          <h3>Kontakt</h3>
+          <p>Montag bis Freitag von 9 bis 16 Uhr, per E-Mail und telefonisch.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== Fußbereich ===== -->
+<footer class="fuss">
+  <div class="fuss-raster">
+    <div>
+      <h3>Sortiment</h3>
+      <ul>
+        <li><a href="kategorie.html?id=SCH">Schreiben</a></li>
+        <li><a href="kategorie.html?id=NP">Notieren &amp; Planen</a></li>
+        <li><a href="kategorie.html?id=OA">Ordnen &amp; Aufbewahren</a></li>
+        <li><a href="kategorie.html?id=SG">Sets &amp; Geschenke</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Service</h3>
+      <ul>
+        <li><a href="#serv-titel">Versand</a></li>
+        <li><a href="#serv-titel">Rückgabe</a></li>
+        <li><a href="#serv-titel">Kontakt</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Rechtliches</h3>
+      <ul>
+        <li><a href="impressum.html">Impressum (Platzhalter)</a></li>
+        <li><a href="datenschutz.html">Datenschutzerklärung (Platzhalter)</a></li>
+        <li><a href="#">AGB (Platzhalter)</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="riesenmarke">
+    <img src="../Logo/studio-leerzeile-logo-kurz-transparent.png" alt="" aria-hidden="true">
+  </div>
+
+  <div class="fuss-schluss">
+    <span class="unterzeile">papier. ideen. lieblingsstücke.</span>
+    <span>Demo-Shop der KI-Manager-Weiterbildung – alle Produkte, Preise und Firmendaten sind erfunden.</span>
+    <span class="ki-hinweis">Produktbilder KI-generiert · Beispielbilder; Farben können abweichen.</span>
+    <span>© 2026 studio.leerzeile</span>
+  </div>
+</footer>
+
+<script src="data/shopdaten.js"></script>
+<script src="js/shop.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿Varianten-SKU;Artikelnummer;Produkt;Kategorie;Farbe;HEX;Preis netto EUR;USt 19% EUR;Preis brutto EUR;EK netto (Demo);Bestand (Demo);Bild
+ST-SCH-001-IV;ST-SCH-001;Füllfederhalter „Signature“;Schreiben;Elfenbein;#F0E9DF;50,34;9,56;59,90;23,50;18;assets/products/ST-SCH-001.png
+ST-SCH-001-SG;ST-SCH-001;Füllfederhalter „Signature“;Schreiben;Salbeigrün;#98A489;50,34;9,56;59,90;23,50;12;assets/products/ST-SCH-001.png
+ST-SCH-001-AN;ST-SCH-001;Füllfederhalter „Signature“;Schreiben;Anthrazit;#383A3A;50,34;9,56;59,90;23,50;10;assets/products/ST-SCH-001.png
+ST-SCH-002-IV;ST-SCH-002;Kugelschreiber „Pure“;Schreiben;Elfenbein;#F0E9DF;20,92;3,98;24,90;8,90;25;assets/products/ST-SCH-002.png
+ST-SCH-002-TE;ST-SCH-002;Kugelschreiber „Pure“;Schreiben;Terrakotta;#B95A37;20,92;3,98;24,90;8,90;18;assets/products/ST-SCH-002.png
+ST-SCH-002-AN;ST-SCH-002;Kugelschreiber „Pure“;Schreiben;Anthrazit;#383A3A;20,92;3,98;24,90;8,90;14;assets/products/ST-SCH-002.png
+ST-SCH-003-IV;ST-SCH-003;Rollerball „Flow“;Schreiben;Elfenbein;#F0E9DF;29,33;5,57;34,90;13,40;16;assets/products/ST-SCH-003.png
+ST-SCH-003-SG;ST-SCH-003;Rollerball „Flow“;Schreiben;Salbeigrün;#98A489;29,33;5,57;34,90;13,40;13;assets/products/ST-SCH-003.png
+ST-SCH-003-TE;ST-SCH-003;Rollerball „Flow“;Schreiben;Terrakotta;#B95A37;29,33;5,57;34,90;13,40;12;assets/products/ST-SCH-003.png
+ST-SCH-004-IV;ST-SCH-004;Stifte-Etui „Essence“;Schreiben;Elfenbein;#F0E9DF;16,72;3,18;19,90;6,80;22;assets/products/ST-SCH-004.png
+ST-SCH-004-SG;ST-SCH-004;Stifte-Etui „Essence“;Schreiben;Salbeigrün;#98A489;16,72;3,18;19,90;6,80;17;assets/products/ST-SCH-004.png
+ST-SCH-004-TE;ST-SCH-004;Stifte-Etui „Essence“;Schreiben;Terrakotta;#B95A37;16,72;3,18;19,90;6,80;20;assets/products/ST-SCH-004.png
+ST-NP-001-IV;ST-NP-001;Notizbuch A5 „Gedankenraum“;Notieren & Planen;Elfenbein;#F0E9DF;15,88;3,02;18,90;6,40;36;assets/products/ST-NP-001.png
+ST-NP-001-SG;ST-NP-001;Notizbuch A5 „Gedankenraum“;Notieren & Planen;Salbeigrün;#98A489;15,88;3,02;18,90;6,40;28;assets/products/ST-NP-001.png
+ST-NP-001-TE;ST-NP-001;Notizbuch A5 „Gedankenraum“;Notieren & Planen;Terrakotta;#B95A37;15,88;3,02;18,90;6,40;24;assets/products/ST-NP-001.png
+ST-NP-002-IV;ST-NP-002;Journal „Daily Moments“;Notieren & Planen;Elfenbein;#F0E9DF;20,92;3,98;24,90;9,60;22;assets/products/ST-NP-002.png
+ST-NP-002-SG;ST-NP-002;Journal „Daily Moments“;Notieren & Planen;Salbeigrün;#98A489;20,92;3,98;24,90;9,60;25;assets/products/ST-NP-002.png
+ST-NP-002-TE;ST-NP-002;Journal „Daily Moments“;Notieren & Planen;Terrakotta;#B95A37;20,92;3,98;24,90;9,60;17;assets/products/ST-NP-002.png
+ST-NP-003-IV;ST-NP-003;Wochenplaner „Clear Week“;Notieren & Planen;Elfenbein;#F0E9DF;14,20;2,70;16,90;5,90;30;assets/products/ST-NP-003.png
+ST-NP-003-SG;ST-NP-003;Wochenplaner „Clear Week“;Notieren & Planen;Salbeigrün;#98A489;14,20;2,70;16,90;5,90;24;assets/products/ST-NP-003.png
+ST-NP-003-TE;ST-NP-003;Wochenplaner „Clear Week“;Notieren & Planen;Terrakotta;#B95A37;14,20;2,70;16,90;5,90;20;assets/products/ST-NP-003.png
+ST-NP-004-IV;ST-NP-004;Schreibtischblock „Focus“;Notieren & Planen;Elfenbein;#F0E9DF;10,84;2,06;12,90;4,30;30;assets/products/ST-NP-004.png
+ST-NP-004-SG;ST-NP-004;Schreibtischblock „Focus“;Notieren & Planen;Salbeigrün;#98A489;10,84;2,06;12,90;4,30;29;assets/products/ST-NP-004.png
+ST-NP-004-TE;ST-NP-004;Schreibtischblock „Focus“;Notieren & Planen;Terrakotta;#B95A37;10,84;2,06;12,90;4,30;25;assets/products/ST-NP-004.png
+ST-OA-001-IV;ST-OA-001;Dokumentenmappe „Classy“;Ordnen & Aufbewahren;Elfenbein;#F0E9DF;25,13;4,77;29,90;11,20;18;assets/products/ST-OA-001.png
+ST-OA-001-SG;ST-OA-001;Dokumentenmappe „Classy“;Ordnen & Aufbewahren;Salbeigrün;#98A489;25,13;4,77;29,90;11,20;16;assets/products/ST-OA-001.png
+ST-OA-001-TE;ST-OA-001;Dokumentenmappe „Classy“;Ordnen & Aufbewahren;Terrakotta;#B95A37;25,13;4,77;29,90;11,20;13;assets/products/ST-OA-001.png
+ST-OA-002-IV;ST-OA-002;Ringordner „Structure“;Ordnen & Aufbewahren;Elfenbein;#F0E9DF;19,24;3,66;22,90;8,60;23;assets/products/ST-OA-002.png
+ST-OA-002-SG;ST-OA-002;Ringordner „Structure“;Ordnen & Aufbewahren;Salbeigrün;#98A489;19,24;3,66;22,90;8,60;18;assets/products/ST-OA-002.png
+ST-OA-002-AN;ST-OA-002;Ringordner „Structure“;Ordnen & Aufbewahren;Anthrazit;#383A3A;19,24;3,66;22,90;8,60;13;assets/products/ST-OA-002.png
+ST-SG-001-IV;ST-SG-001;Schreibset „First Words“;Sets & Geschenke;Elfenbein;#F0E9DF;58,74;11,16;69,90;28,50;10;assets/products/ST-SG-001.png
+ST-SG-001-SG;ST-SG-001;Schreibset „First Words“;Sets & Geschenke;Salbeigrün;#98A489;58,74;11,16;69,90;28,50;8;assets/products/ST-SG-001.png
+ST-SG-001-TE;ST-SG-001;Schreibset „First Words“;Sets & Geschenke;Terrakotta;#B95A37;58,74;11,16;69,90;28,50;7;assets/products/ST-SG-001.png
+ST-SG-002-IV;ST-SG-002;Geschenkbox „New Beginnings“;Sets & Geschenke;Elfenbein;#F0E9DF;75,55;14,35;89,90;38,60;8;assets/products/ST-SG-002.png
+ST-SG-002-SG;ST-SG-002;Geschenkbox „New Beginnings“;Sets & Geschenke;Salbeigrün;#98A489;75,55;14,35;89,90;38,60;7;assets/products/ST-SG-002.png
+ST-SG-002-TE;ST-SG-002;Geschenkbox „New Beginnings“;Sets & Geschenke;Terrakotta;#B95A37;75,55;14,35;89,90;38,60;6;assets/products/ST-SG-002.png
