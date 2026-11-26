@@ -22,7 +22,7 @@
 }
 
 *{box-sizing:border-box;}
-html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;color-scheme:light;} /* bleibt auch im Dunkelmodus hell */
 
 body{
   margin:0;

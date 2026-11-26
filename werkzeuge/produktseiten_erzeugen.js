@@ -48,6 +48,11 @@ function pfadeTiefer(html) {
 
 let kopf = pfadeTiefer(VORLAGE.slice(0, mainAnfang));
 let fuss = pfadeTiefer(VORLAGE.slice(mainEnde + '</main>'.length));
+// Seite bleibt auch im Dunkelmodus hell: color-scheme direkt nach dem viewport-Meta (falls die Vorlage es nicht schon hat)
+if (!kopf.includes('<meta name="color-scheme" content="only light">')) {
+  kopf = kopf.replace(/(<meta name="viewport"[^>]*>)/, '$1\n<meta name="color-scheme" content="only light">');
+}
+if (!kopf.includes('<meta name="color-scheme" content="only light">')) fehler('color-scheme-Meta konnte nicht eingefügt werden');
 kopf = kopf.replace('<body data-seite="info">', '<body data-seite="produktseite" data-basis="../">');
 if (!kopf.includes('data-seite="produktseite"')) fehler('<body data-seite="info"> in impressum.html nicht gefunden');
 fuss = fuss.replace(' aria-current="page"', '');
