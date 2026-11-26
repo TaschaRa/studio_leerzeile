@@ -107,6 +107,47 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terrakotta);outline
 /* Menü-Schaltfläche: nur am Handy und nur mit JavaScript sichtbar */
 .menue-knopf{display:none;}
 
+/* Kopf: Schalter "Einfache Sprache" und Warenkorb als Gruppe rechts */
+.kopf-aktionen{display:flex;align-items:center;gap:clamp(12px,1.5vw,20px);}
+.sprach-schalter{display:none;}   /* ohne JavaScript ausgeblendet – er würde dann nicht funktionieren */
+.js .sprach-schalter{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:44px;min-width:44px;padding:0 12px;
+  background:none;border:1px solid var(--terrakotta);color:var(--terrakotta);
+  font-family:var(--sans);font-size:var(--t-label);letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:background-color .25s ease,color .25s ease;
+}
+.js .sprach-schalter:hover,
+.js .sprach-schalter[aria-pressed="true"]{background:var(--terrakotta);color:var(--weiss);}
+/* eingeschaltet: zusätzlich ein Häkchen – Zustand nicht nur über Farbe */
+.js .sprach-schalter[aria-pressed="true"]::before{content:"✓";letter-spacing:0;font-size:15px;}
+
+/* Laptop-Breiten: Navigation geordnet in eine eigene, zentrierte zweite Zeile (Platz für den Sprachschalter) */
+@media (min-width:901px){
+  .js .kopf-zeile{column-gap:clamp(16px,2vw,48px);}
+}
+@media (min-width:901px) and (max-width:1380px){
+  .js .kopf-zeile{row-gap:6px;}
+  .js .navi{order:3;flex-basis:100%;}
+  .js .navi ul{justify-content:center;}
+}
+
+/* Einfache Sprache: der längere Claim bekommt die Größe der übrigen Überschriften */
+html[data-sprache="einfach"] .start h1{font-size:var(--t-xl);}
+
+/* nur für Screenreader sichtbar (z. B. Statusmeldung beim Sprachwechsel) */
+.sr-nur{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+
+/* Tippflächen mindestens 44 px – auch am Desktop (Navigation, Menü, Schaltflächen) */
+.navi a{position:relative;}
+/* unsichtbare Tippfläche um den Link: Aussehen und Hover-Linie bleiben unverändert */
+.navi a::after{content:"";position:absolute;left:-8px;right:-8px;top:50%;height:44px;transform:translateY(-50%);}
+.warenkorb{display:inline-flex;align-items:center;min-height:44px;}
+.logo{display:flex;align-items:center;min-height:44px;}
+.brotkrumen a{display:inline-flex;align-items:center;min-height:44px;}
+.prod-name a,.wk-name a{display:inline-block;padding:10px 0;margin:-10px 0;}
+.produkt-info .prod-kategorie a{display:inline-block;padding:14px 0;margin:-14px 0;}
+
 /* ---------- Startbereich: randlos, Text im Bild ---------- */
 /* Pfad relativ zu dieser CSS-Datei: website/css/ → ../../Bilder */
 .start{
@@ -208,8 +249,8 @@ section{padding:clamp(60px,9vw,130px) 0;}
   text-transform:uppercase;color:var(--salbei);margin:0 0 18px;
 }
 .fuss ul{list-style:none;margin:0;padding:0;}
-.fuss li{margin-bottom:10px;font-size:16px;}
-.fuss li a{color:var(--anthrazit);text-decoration:none;}
+.fuss li{margin-bottom:0;font-size:16px;}
+.fuss li a{display:inline-flex;align-items:center;min-height:44px;color:var(--anthrazit);text-decoration:none;}
 .fuss li a:hover{color:var(--terrakotta);text-decoration:underline;text-underline-offset:4px;}
 
 .riesenmarke{margin:clamp(40px,6vw,72px) var(--rand) 0;display:flex;justify-content:center;}
@@ -240,6 +281,22 @@ section{padding:clamp(60px,9vw,130px) 0;}
 /* Textlink mit ausreichend großer Tippfläche */
 .textlink{display:inline-flex;align-items:center;min-height:44px;text-underline-offset:4px;}
 .textlink:hover{color:var(--anthrazit);}
+
+/* ---------- FAQ (faq.html): aufklappbar mit <details>, ohne JavaScript ---------- */
+.faq-liste{max-width:62ch;margin:0 auto;border-top:1px solid rgba(61,92,75,.25);}
+.faq{border-bottom:1px solid rgba(61,92,75,.25);}
+.faq summary{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  min-height:56px;padding:12px 0;cursor:pointer;list-style:none;
+  font-family:var(--serif);font-size:21px;line-height:1.3;color:var(--anthrazit);
+}
+.faq summary::-webkit-details-marker{display:none;}
+.faq summary::after{content:"+";flex:none;font-family:var(--sans);font-size:24px;line-height:1;color:var(--terrakotta);}
+.faq[open] summary::after{content:"–";}
+.faq summary:hover{color:var(--terrakotta);}
+.faq summary:focus-visible{outline:2px solid var(--terrakotta);outline-offset:4px;}
+.faq p{margin:0 0 20px;max-width:58ch;}
+.service-faq{text-align:center;margin:clamp(28px,4vw,48px) 0 0;}
 
 /* ==========================================================
    Shop: Kategorie-, Produkt- und Warenkorbseite (js/shop.js)
@@ -359,6 +416,39 @@ section{padding:clamp(60px,9vw,130px) 0;}
 .wk-aktionen{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px;margin:24px 0 0;}
 .wk-aktionen .knopf{text-align:center;}
 
+/* Kasse (kasse.html): links Bestellübersicht, rechts Beispiel-Angaben */
+.kasse-raster{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,5vw,80px);align-items:start;}
+.kasse-raster h2{font-size:26px;margin:0 0 18px;}
+.kasse-artikel{list-style:none;margin:0;padding:0;border-top:1px solid rgba(61,92,75,.25);}
+.kasse-artikel li{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;
+  padding:14px 0;border-bottom:1px solid rgba(61,92,75,.25);font-size:16px;
+}
+.kasse-artikel-menge{color:var(--salbei);font-size:var(--t-small);}
+.kasse-artikel-summe{grid-column:2;grid-row:1 / span 2;align-self:center;font-size:19px;margin:0;}
+.kasse-summen{max-width:none;margin:18px 0 0;}
+.kasse-hinweis{margin:0 0 16px;}
+.kasse-einleitung{margin:0 0 20px;font-size:16px;}
+.kasse-feld{margin:0 0 18px;}
+.kasse-feld label{display:block;font-size:16px;margin:0 0 6px;}
+.kasse-feld input{
+  display:block;width:100%;min-height:48px;padding:0 12px;
+  font:inherit;font-size:17px;color:var(--anthrazit);
+  background:var(--weiss);border:1px solid var(--salbei);
+}
+.kasse-feld input:focus-visible{outline:2px solid var(--terrakotta);outline-offset:2px;}
+/* Fehler nicht nur per Farbe: dicker Rand + Text "Fehler: …" + Liste oben */
+.kasse-feld.ungueltig input{border:2px solid var(--anthrazit);}
+.feld-fehler{margin:6px 0 0;font-size:16px;font-weight:600;color:var(--anthrazit);}
+.fehler-box:empty{display:none;}
+.fehler-box{border:2px solid var(--anthrazit);background:var(--weiss);padding:14px 18px;margin:0 0 20px;font-size:16px;}
+.fehler-box:focus{outline:2px solid var(--terrakotta);outline-offset:2px;}
+.fehler-titel{margin:0 0 6px;font-weight:600;}
+.fehler-box ul{margin:0;padding-left:20px;}
+.fehler-box a{display:inline-flex;align-items:center;min-height:44px;}
+.kasse-aktion{margin:8px 0 0;}
+.kasse-aktion .knopf{min-height:48px;}
+
 /* Menge im Warenkorb: − Feld + (Tippflächen 44 px) */
 .mengen-steuerung{display:flex;align-items:stretch;}
 .mengen-knopf{
@@ -387,19 +477,21 @@ section{padding:clamp(60px,9vw,130px) 0;}
   .fuss-raster{grid-template-columns:1fr 1fr;}
 
   /* Tippflächen mindestens 44 px hoch */
-  .navi a,.warenkorb,.fuss li a{display:inline-flex;align-items:center;min-height:44px;}
-  .logo{display:flex;align-items:center;min-height:44px;}
-  .fuss li{margin-bottom:0;}
+  .navi a{display:inline-flex;align-items:center;min-height:44px;}
 
   /* ----- Handy-Menü (nur wenn JavaScript läuft, Klasse "js" am <html>) ----- */
+  /* Reihen: Logo / Menü + Warenkorb / Einfache Sprache / aufgeklappte Navigation */
   .js .kopf-zeile{
-    display:grid;grid-template-columns:auto auto;
-    justify-content:space-between;align-items:center;
-    gap:18px 16px;
+    display:grid;grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"logo logo" "menue korb" "sprache sprache" "navi navi";
+    align-items:center;gap:14px 16px;
   }
-  .js .logo{grid-column:1 / -1;justify-self:center;}
+  .js .logo{grid-area:logo;justify-self:center;}
+  .js .kopf-aktionen{display:contents;}
+  .js .sprach-schalter{grid-area:sprache;width:100%;}
 
   .js .menue-knopf{
+    grid-area:menue;justify-self:start;
     display:inline-flex;align-items:center;gap:10px;
     min-height:44px;padding:0 18px;
     background:none;border:1px solid var(--terrakotta);color:var(--terrakotta);
@@ -416,10 +508,10 @@ section{padding:clamp(60px,9vw,130px) 0;}
   }
   .js .menue-knopf[aria-expanded="true"]::after{transform:translateY(2px) rotate(-135deg);}
 
-  .js .warenkorb{justify-self:end;}
+  .js .warenkorb{grid-area:korb;justify-self:end;}
 
   /* Navigation: zugeklappt, bis "Menü" angetippt wird */
-  .js .navi{display:none;grid-column:1 / -1;order:3;}
+  .js .navi{display:none;grid-area:navi;}
   .js .navi.offen{display:block;}
   .js .navi ul{flex-direction:column;gap:0;border-top:1px solid rgba(61,92,75,.25);}
   .js .navi li{border-bottom:1px solid rgba(61,92,75,.25);}
@@ -433,10 +525,8 @@ section{padding:clamp(60px,9vw,130px) 0;}
 }
 @media (max-width:900px){
   .produkt-detail{grid-template-columns:1fr;}
+  .kasse-raster{grid-template-columns:1fr;}
   /* Tippflächen ≥ 44 px: unsichtbarer Innenabstand, negativer Außenabstand gleicht ihn aus (nichts verschiebt sich) */
-  .prod-name a{display:inline-block;padding:10px 0;margin:-10px 0;}
-  .produkt-info .prod-kategorie a{display:inline-block;padding:14px 0;margin:-14px 0;}
-  .brotkrumen a{display:inline-flex;align-items:center;min-height:44px;}
 }
 @media (max-width:700px){
   /* Warenkorb am Handy: Bild + Text, darunter Menge und Summe, dann "Entfernen" */

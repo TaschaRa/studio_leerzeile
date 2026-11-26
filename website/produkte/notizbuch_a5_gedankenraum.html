@@ -37,7 +37,11 @@
       </ul>
     </nav>
 
-    <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    <div class="kopf-aktionen">
+      <!-- nur mit JavaScript sichtbar: wechselt zwischen normaler und Einfacher Sprache -->
+      <button class="sprach-schalter" type="button" aria-pressed="false">Einfache Sprache</button>
+      <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    </div>
   </div>
 </header>
 
@@ -68,7 +72,7 @@
           <h1>Notizbuch A5 „Gedankenraum“</h1>
           <p class="preis">18,90 €</p>
           <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
-          <p class="produkt-kurztext">A5-Notizbuch mit Leinenrücken, 192 punktierten Seiten und cremefarbenem Papier.</p>
+          <p class="produkt-kurztext" data-einfach="Ein Notizbuch in der Größe A5. Es hat 192 Seiten mit kleinen Punkten. Das Papier ist leicht gelblich.">A5-Notizbuch mit Leinenrücken, 192 punktierten Seiten und cremefarbenem Papier.</p>
           <p class="produkt-text">Eine leere Seite ist voller Möglichkeiten. „Gedankenraum“ bietet Platz für Ideen, Skizzen, Listen und alles, was Sie nicht vergessen möchten. Das Notizbuch im A5-Format verbindet 192 punktierte Seiten aus cremefarbenem Papier mit einem Leinenrücken und einer ruhigen, reduzierten Gestaltung. Die Punktstruktur gibt Orientierung, ohne Ihre Gedanken einzuengen. Für den Schreibtisch, das nächste Meeting oder eine Idee zwischendurch.</p>
 
           <fieldset class="farbwahl">
@@ -109,9 +113,9 @@
             <dt>Umfang</dt><dd>192 Seiten</dd>
             <dt>Papier</dt><dd>Cremefarben, punktiert</dd>
             <dt>Einband</dt><dd>Leinenrücken</dd>
-            <dt>Versand</dt><dd>4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
-            <dt>Lieferzeit</dt><dd>2–4 Werktage</dd>
-            <dt>Rückgabe</dt><dd>30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
+            <dt>Versand</dt><dd data-einfach="Der Versand kostet 4,90 €. Ab einem Warenwert von 50 € ist der Versand kostenlos.">4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
+            <dt>Lieferzeit</dt><dd data-einfach="Die Lieferung dauert 2 bis 4 Werktage.">2–4 Werktage</dd>
+            <dt>Rückgabe</dt><dd data-einfach="Sie können Artikel 30 Tage lang zurückgeben. Diese Regel ist nur ein Beispiel für den Übungs-Shop. Ihre Rechte aus dem Gesetz gelten immer.">30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
           </dl>
         </div>
       </div>
@@ -137,6 +141,7 @@
         <li><a href="../index.html#serv-titel">Versand</a></li>
         <li><a href="../index.html#serv-titel">Rückgabe</a></li>
         <li><a href="../index.html#serv-titel">Kontakt</a></li>
+        <li><a href="../faq.html">Fragen und Antworten</a></li>
       </ul>
     </div>
     <div>

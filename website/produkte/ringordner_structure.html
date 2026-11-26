@@ -37,7 +37,11 @@
       </ul>
     </nav>
 
-    <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    <div class="kopf-aktionen">
+      <!-- nur mit JavaScript sichtbar: wechselt zwischen normaler und Einfacher Sprache -->
+      <button class="sprach-schalter" type="button" aria-pressed="false">Einfache Sprache</button>
+      <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    </div>
   </div>
 </header>
 
@@ -68,7 +72,7 @@
           <h1>Ringordner „Structure“</h1>
           <p class="preis">22,90 €</p>
           <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
-          <p class="produkt-kurztext">A4-Ringordner mit Leinenbezug, 2-Ring-Mechanik und beschriftbarem Rückenetikett.</p>
+          <p class="produkt-kurztext" data-einfach="Ein Ordner für Blätter in der Größe A4. Er ist mit Stoff bezogen und hat 2 Ringe. Auf den Rücken können Sie etwas schreiben.">A4-Ringordner mit Leinenbezug, 2-Ring-Mechanik und beschriftbarem Rückenetikett.</p>
           <p class="produkt-text">Ordnung darf Teil der Einrichtung sein. „Structure“ ist ein A4-Ringordner für Unterlagen, Projekte und alles, was seinen festen Platz braucht. Der Leinenbezug sorgt für eine ruhige Optik, die 2-Ring-Mechanik hält die Inhalte zusammen und das Rückenetikett erleichtert die Zuordnung im Regal. Für Arbeitsplätze, an denen Übersicht und Gestaltung gleichermaßen zählen.</p>
 
           <fieldset class="farbwahl">
@@ -109,9 +113,9 @@
             <dt>Mechanik</dt><dd>2-Ring</dd>
             <dt>Einband</dt><dd>Leinenbezug</dd>
             <dt>Beschriftung</dt><dd>Rückenetikett</dd>
-            <dt>Versand</dt><dd>4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
-            <dt>Lieferzeit</dt><dd>2–4 Werktage</dd>
-            <dt>Rückgabe</dt><dd>30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
+            <dt>Versand</dt><dd data-einfach="Der Versand kostet 4,90 €. Ab einem Warenwert von 50 € ist der Versand kostenlos.">4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
+            <dt>Lieferzeit</dt><dd data-einfach="Die Lieferung dauert 2 bis 4 Werktage.">2–4 Werktage</dd>
+            <dt>Rückgabe</dt><dd data-einfach="Sie können Artikel 30 Tage lang zurückgeben. Diese Regel ist nur ein Beispiel für den Übungs-Shop. Ihre Rechte aus dem Gesetz gelten immer.">30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
           </dl>
         </div>
       </div>
@@ -137,6 +141,7 @@
         <li><a href="../index.html#serv-titel">Versand</a></li>
         <li><a href="../index.html#serv-titel">Rückgabe</a></li>
         <li><a href="../index.html#serv-titel">Kontakt</a></li>
+        <li><a href="../faq.html">Fragen und Antworten</a></li>
       </ul>
     </div>
     <div>

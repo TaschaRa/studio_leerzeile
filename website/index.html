@@ -37,7 +37,11 @@
       </ul>
     </nav>
 
-    <a class="warenkorb" href="warenkorb.html">Warenkorb (0)</a>
+    <div class="kopf-aktionen">
+      <!-- nur mit JavaScript sichtbar: wechselt zwischen normaler und Einfacher Sprache -->
+      <button class="sprach-schalter" type="button" aria-pressed="false">Einfache Sprache</button>
+      <a class="warenkorb" href="warenkorb.html">Warenkorb (0)</a>
+    </div>
   </div>
 </header>
 
@@ -46,8 +50,8 @@
   <!-- ===== Startbereich ===== -->
   <section class="start">
     <div class="start-text">
-      <h1>Papier. Ideen. Lieblingsstücke.</h1>
-      <p>Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</p>
+      <h1 data-einfach="Schöne Dinge zum Schreiben und Planen.">Papier. Ideen. Lieblingsstücke.</h1>
+      <p data-einfach="Hier finden Sie schöne Dinge zum Schreiben. Zum Beispiel Stifte und Notizbücher.">Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</p>
       <a class="knopf" href="#bestseller">Zur Kollektion</a>
     </div>
   </section>
@@ -105,7 +109,7 @@
       <div class="abschnittskopf">
         <p class="label zentriert">· Bestseller</p>
         <h2 id="best-titel">Unsere Lieblingsstücke</h2>
-        <p>Vier Stücke, die am häufigsten den Schreibtisch wechseln.</p>
+        <p>Vier Lieblingsstücke aus unserem Demo-Sortiment.</p>
       </div>
 
       <div class="prod-raster">
@@ -178,18 +182,14 @@
   <section class="editorial" aria-labelledby="edi-titel">
     <div class="inhalt">
       <p class="label zentriert">· Über uns</p>
-      <h2 id="edi-titel">Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</h2>
+      <h2 id="edi-titel" data-einfach="Schöne Dinge zum Schreiben.">Schöne Dinge. Klare Gedanken. Mehr Raum für Ideen.</h2>
 
       <div class="fliesstext">
-        <p>
-          studio.leerzeile ist kein Bürobedarf, sondern eine kleine Papeterie:
-          Wir suchen Stücke aus, die lange halten und beim Benutzen besser werden –
-          Papier, das die Tinte trägt, Metall, das warm wird in der Hand.
+        <p data-einfach="studio.leerzeile ist ein Übungs-Shop. Er ist nicht echt. Er zeigt, wie ein kleiner Laden für Papier und Stifte aussehen kann.">
+          studio.leerzeile ist ein fiktiver Demo-Shop für Papeterie. Er zeigt, wie eine kleine Papeterie Stücke präsentieren könnte, die lange halten und beim Benutzen besser werden – Papier, das die Tinte trägt, Metall, das warm wird in der Hand.
         </p>
-        <p>
-          Jedes Produkt prüfen wir, bevor es ins Sortiment kommt. Was uns nicht
-          überzeugt, nehmen wir nicht auf. Deshalb sind es zwölf Stücke und nicht
-          zwölfhundert.
+        <p data-einfach="Es gibt hier nur 12 erfundene Produkte. Sie können nichts kaufen. Es wird nichts geliefert.">
+          Die Auswahl ist bewusst klein: zwölf erfundene Stücke statt zwölfhundert. Hier wird nichts verkauft, geprüft oder geliefert.
         </p>
       </div>
 
@@ -208,17 +208,18 @@
       <div class="service-raster">
         <div class="service-punkt">
           <h3>Versand</h3>
-          <p>Versand 4,90 €, ab 50 € Warenwert versandkostenfrei. Lieferzeit: 2–4 Werktage.</p>
+          <p data-einfach="Der Versand kostet 4,90 €. Ab einem Warenwert von 50 € ist der Versand kostenlos. Die Lieferung dauert 2 bis 4 Werktage.">Versand 4,90 €, ab 50 € Warenwert versandkostenfrei. Lieferzeit: 2–4 Werktage.</p>
         </div>
         <div class="service-punkt">
           <h3>Rückgabe</h3>
-          <p>30 Tage freiwillige Rückgabe (fiktive Demo-Angabe). Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</p>
+          <p data-einfach="Sie können Artikel 30 Tage lang zurückgeben. Diese Regel ist nur ein Beispiel für den Übungs-Shop. Ihre Rechte aus dem Gesetz gelten immer.">30 Tage freiwillige Rückgabe (fiktive Demo-Angabe). Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</p>
         </div>
         <div class="service-punkt">
           <h3>Kontakt</h3>
-          <p>Montag bis Freitag von 9 bis 16 Uhr, per E-Mail und telefonisch.</p>
+          <p data-einfach="Sie erreichen uns von Montag bis Freitag. Von 9 bis 16 Uhr. Per E-Mail oder per Telefon.">Montag bis Freitag von 9 bis 16 Uhr, per E-Mail und telefonisch.</p>
         </div>
       </div>
+      <p class="service-faq"><a class="textlink" href="faq.html">Alle Fragen und Antworten</a></p>
     </div>
   </section>
 
@@ -242,6 +243,7 @@
         <li><a href="#serv-titel">Versand</a></li>
         <li><a href="#serv-titel">Rückgabe</a></li>
         <li><a href="#serv-titel">Kontakt</a></li>
+        <li><a href="faq.html">Fragen und Antworten</a></li>
       </ul>
     </div>
     <div>

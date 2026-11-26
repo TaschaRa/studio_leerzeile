@@ -37,7 +37,11 @@
       </ul>
     </nav>
 
-    <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    <div class="kopf-aktionen">
+      <!-- nur mit JavaScript sichtbar: wechselt zwischen normaler und Einfacher Sprache -->
+      <button class="sprach-schalter" type="button" aria-pressed="false">Einfache Sprache</button>
+      <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    </div>
   </div>
 </header>
 
@@ -68,7 +72,7 @@
           <h1>Dokumentenmappe „Classy“</h1>
           <p class="preis">29,90 €</p>
           <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
-          <p class="produkt-kurztext">Flache Dokumentenmappe für A4-Unterlagen mit zwei Innenfächern in Lederoptik.</p>
+          <p class="produkt-kurztext" data-einfach="Eine flache Mappe für Blätter in der Größe A4. Sie hat innen 2 Fächer. Sie sieht aus wie Leder.">Flache Dokumentenmappe für A4-Unterlagen mit zwei Innenfächern in Lederoptik.</p>
           <p class="produkt-text">Unterlagen können praktisch aufbewahrt werden – und dabei gut aussehen. Die Dokumentenmappe „Classy“ bietet im A4-Format zwei Innenfächer für Papiere, Angebote, Notizen und wichtige Dokumente. Ihre flache Form eignet sich für den Transport in der Tasche ebenso wie für einen aufgeräumten Schreibtisch. Das Material in Lederoptik unterstreicht den schlichten, hochwertigen Look.</p>
 
           <fieldset class="farbwahl">
@@ -108,9 +112,9 @@
             <dt>Format</dt><dd>A4</dd>
             <dt>Aufteilung</dt><dd>2 Innenfächer</dd>
             <dt>Material</dt><dd>Lederoptik</dd>
-            <dt>Versand</dt><dd>4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
-            <dt>Lieferzeit</dt><dd>2–4 Werktage</dd>
-            <dt>Rückgabe</dt><dd>30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
+            <dt>Versand</dt><dd data-einfach="Der Versand kostet 4,90 €. Ab einem Warenwert von 50 € ist der Versand kostenlos.">4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
+            <dt>Lieferzeit</dt><dd data-einfach="Die Lieferung dauert 2 bis 4 Werktage.">2–4 Werktage</dd>
+            <dt>Rückgabe</dt><dd data-einfach="Sie können Artikel 30 Tage lang zurückgeben. Diese Regel ist nur ein Beispiel für den Übungs-Shop. Ihre Rechte aus dem Gesetz gelten immer.">30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
           </dl>
         </div>
       </div>
@@ -136,6 +140,7 @@
         <li><a href="../index.html#serv-titel">Versand</a></li>
         <li><a href="../index.html#serv-titel">Rückgabe</a></li>
         <li><a href="../index.html#serv-titel">Kontakt</a></li>
+        <li><a href="../faq.html">Fragen und Antworten</a></li>
       </ul>
     </div>
     <div>

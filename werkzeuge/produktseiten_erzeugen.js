@@ -73,6 +73,7 @@ for (const p of KATALOG.products.filter(x => x.active)) {
   const preisCent = cent(p.price_gross_eur);
   if (!Number.isInteger(preisCent) || preisCent <= 0) fehler(p.id + ': ungültiger Preis');
   if (!p.variants || !p.variants.length) fehler(p.id + ': keine Farben');
+  if (typeof p.description_einfach !== 'string' || !p.description_einfach.trim()) fehler(p.id + ': description_einfach fehlt in produkte.json');
   for (const v of p.variants) {
     if (!Number.isInteger(v.stock) || v.stock < 0) fehler(v.sku + ': ungültiger Bestand');
     if (cent(v.price_gross_eur) !== preisCent) fehler(v.sku + ': Variantenpreis weicht vom Produktpreis ab');
@@ -122,7 +123,7 @@ for (const p of KATALOG.products.filter(x => x.active)) {
           <h1>${esc(name)}</h1>
           <p class="preis">${esc(euroText(preisCent))}</p>
           <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
-          <p class="produkt-kurztext">${esc(d.short_description || p.description_short)}</p>
+          <p class="produkt-kurztext" data-einfach="${esc(p.description_einfach)}">${esc(d.short_description || p.description_short)}</p>
           <p class="produkt-text">${esc(d.long_description || p.description)}</p>
 
           <fieldset class="farbwahl">
@@ -146,9 +147,9 @@ ${farbfelder}
             <dt>Artikelnummer</dt><dd class="sku">${esc(erste.sku)}</dd>
             <dt>Verfügbarkeit</dt><dd class="bestand-text">${erste.stock > 0 ? erste.stock + ' Stück auf Lager (Demo-Bestand)' : 'Derzeit nicht auf Lager'}</dd>
 ${technik}
-            <dt>Versand</dt><dd>4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
-            <dt>Lieferzeit</dt><dd>2–4 Werktage</dd>
-            <dt>Rückgabe</dt><dd>30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
+            <dt>Versand</dt><dd data-einfach="Der Versand kostet 4,90 €. Ab einem Warenwert von 50 € ist der Versand kostenlos.">4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
+            <dt>Lieferzeit</dt><dd data-einfach="Die Lieferung dauert 2 bis 4 Werktage.">2–4 Werktage</dd>
+            <dt>Rückgabe</dt><dd data-einfach="Sie können Artikel 30 Tage lang zurückgeben. Diese Regel ist nur ein Beispiel für den Übungs-Shop. Ihre Rechte aus dem Gesetz gelten immer.">30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
           </dl>
         </div>
       </div>

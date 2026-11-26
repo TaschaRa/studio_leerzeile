@@ -37,7 +37,11 @@
       </ul>
     </nav>
 
-    <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    <div class="kopf-aktionen">
+      <!-- nur mit JavaScript sichtbar: wechselt zwischen normaler und Einfacher Sprache -->
+      <button class="sprach-schalter" type="button" aria-pressed="false">Einfache Sprache</button>
+      <a class="warenkorb" href="../warenkorb.html">Warenkorb (0)</a>
+    </div>
   </div>
 </header>
 
@@ -68,7 +72,7 @@
           <h1>Kugelschreiber „Pure“</h1>
           <p class="preis">24,90 €</p>
           <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
-          <p class="produkt-kurztext">Schlanker Kugelschreiber aus Metall mit Drehmechanik – für Notizen im Alltag.</p>
+          <p class="produkt-kurztext" data-einfach="Ein schmaler Kugelschreiber aus Metall. Sie drehen am Stift, dann kommt die Mine heraus. Gut für Notizen im Alltag.">Schlanker Kugelschreiber aus Metall mit Drehmechanik – für Notizen im Alltag.</p>
           <p class="produkt-text">Ein Stift, der nicht laut sein muss, um aufzufallen. Der Kugelschreiber „Pure“ setzt auf eine schlanke Silhouette, klare Linien und ein leichtes Metallgehäuse. Dank seiner Drehmechanik ist er unkompliziert zur Hand, wenn ein Gedanke festgehalten, eine Liste ergänzt oder ein Dokument unterschrieben werden soll. Mit seinem reduzierten Design fügt er sich ebenso selbstverständlich in eine Besprechung wie an den heimischen Schreibtisch ein.</p>
 
           <fieldset class="farbwahl">
@@ -107,9 +111,9 @@
             <dt>Verfügbarkeit</dt><dd class="bestand-text">25 Stück auf Lager (Demo-Bestand)</dd>
             <dt>Gehäuse</dt><dd>Metall</dd>
             <dt>Bedienung</dt><dd>Drehmechanik</dd>
-            <dt>Versand</dt><dd>4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
-            <dt>Lieferzeit</dt><dd>2–4 Werktage</dd>
-            <dt>Rückgabe</dt><dd>30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
+            <dt>Versand</dt><dd data-einfach="Der Versand kostet 4,90 €. Ab einem Warenwert von 50 € ist der Versand kostenlos.">4,90 €, ab 50 € Warenwert versandkostenfrei</dd>
+            <dt>Lieferzeit</dt><dd data-einfach="Die Lieferung dauert 2 bis 4 Werktage.">2–4 Werktage</dd>
+            <dt>Rückgabe</dt><dd data-einfach="Sie können Artikel 30 Tage lang zurückgeben. Diese Regel ist nur ein Beispiel für den Übungs-Shop. Ihre Rechte aus dem Gesetz gelten immer.">30 Tage freiwillige Rückgabe (fiktive Demo-Angabe); Ihre gesetzlichen Verbraucherrechte bleiben unberührt.</dd>
           </dl>
         </div>
       </div>
@@ -135,6 +139,7 @@
         <li><a href="../index.html#serv-titel">Versand</a></li>
         <li><a href="../index.html#serv-titel">Rückgabe</a></li>
         <li><a href="../index.html#serv-titel">Kontakt</a></li>
+        <li><a href="../faq.html">Fragen und Antworten</a></li>
       </ul>
     </div>
     <div>

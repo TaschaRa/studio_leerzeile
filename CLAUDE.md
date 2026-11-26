@@ -8,11 +8,13 @@ Demo-Shop **studio.leerzeile**: kleine Papeterie (Schreibwaren, Notizbücher, Or
 - `website/impressum.html`, `website/datenschutz.html` – nur Platzhalter
 - `website/kategorie.html?id=SCH|NP|OA|SG` – Produkte einer Kategorie
 - `website/produkte/<seitenname>.html` – 12 Produktseiten mit Farbwahl, **erzeugt** von `werkzeuge/produktseiten_erzeugen.js` aus `daten/import/produkte.json` (Seitenname = Slug klein, „-“ → „_“, z. B. `fuellfederhalter_signature.html`; der Slug in `produkte.json` bleibt unverändert). Nicht von Hand bearbeiten.
-- `website/warenkorb.html` – Warenkorb (nur im Browser gespeichert, keine Bestellung)
+- `website/warenkorb.html` – Warenkorb (nur im Browser gespeichert, keine Bestellung); Schaltfläche „Als Gast zur Kasse“
+- `website/kasse.html` – Demo-Kasse als Gast: Bestellübersicht + Beispiel-Angaben (Felder legt `js/shop.js` an), lädt kein `shopdaten.js`
+- `website/faq.html` – Fragen und Antworten (`<details>`/`<summary>`, ohne JavaScript bedienbar); Link im Fuß aller Seiten und im Service-Bereich der Startseite
   (alle Seiten teilen Kopf- und Fußbereich sowie `css/style.css`, `js/app.js`, `js/shop.js`; die Produktseiten übernehmen Kopf und Fuß beim Erzeugen aus `impressum.html`.
   Änderungen an Kopf oder Fuß deshalb in allen Seiten in `website/` vornehmen und danach die Produktseiten neu erzeugen. `<body data-seite="…">` sagt shop.js, welche Seite es ist; Produktseiten haben zusätzlich `data-basis="../"`.)
 - `website/css/style.css` – Gestaltung (Farben, Schriften, Abstände, Handy-Ansicht)
-- `website/js/app.js` – Verhalten (Menü-Schaltfläche am Handy, feststehende Kopfzeile)
+- `website/js/app.js` – Verhalten (Menü-Schaltfläche am Handy, feststehende Kopfzeile, Schalter „Einfache Sprache“)
 - `website/js/shop.js` – Shop: Warenkorb (localStorage), Produktseiten (liest data-Attribute), Startseite und Kategorieseiten (lesen den Katalog), Bild-Ausschnitte und Alternativtexte der Kacheln
 - `website/data/shopdaten.js` – Katalog als `window.STUDIO_CATALOG` (Kopie von `daten/import/shopdaten.js`, nicht von Hand bearbeiten). **Nur noch von Startseite und Kategorieseite geladen**; Produktseiten und Warenkorb brauchen ihn nicht.
 - `werkzeuge/produktseiten_erzeugen.js` – erzeugt die Produktseiten (`node werkzeuge/produktseiten_erzeugen.js` im Projektordner)
@@ -35,6 +37,15 @@ Die Ordner `Logo` und `Bilder` bleiben im Projektordner; Pfade nicht verändern.
 **Dateinamen:** Neue Dateien klein, ohne Leerzeichen, mit Unterstrich statt Bindestrich (Wunsch des Dozenten), z. B. `produktseiten_erzeugen.js`. Bestehende Dateien bleiben unverändert.
 
 **Produktseiten und Katalog:** Name, Farbe, SKU, Preis in Cent und Bestand stehen als data-Attribute in den Produktseiten (`data-produkt-id`, `data-name`, `data-preis-cent`, `data-seite` am Produkt; `data-sku`, `data-farbe`, `data-bestand` an jeder Farbe). Ändern sich Preise, Bestand, Texte oder Farben in `produkte.json`, die Seiten mit `node werkzeuge/produktseiten_erzeugen.js` neu erzeugen (und `shopdaten.js` nach `website/data/` kopieren).
+
+**Neues Feld `description_einfach`** in `produkte.json` (je Produkt, direkt hinter `description_short`): Kurztext in Einfacher Sprache; das Erzeugungsskript schreibt ihn als `data-einfach` an den Kurztext der Produktseite und bricht ab, wenn er fehlt. Beim Ändern von `produkte.json` die übrige Struktur unverändert lassen; danach `shopdaten.js` neu ableiten (Kopfzeile + `window.STUDIO_CATALOG = ` + JSON) und nach `daten/import/` **und** `website/data/` schreiben, vorher/nachher vergleichen (12 Produkte, 36 Varianten, Preise, Artikelnummern, Bildzuordnungen).
+
+**Einfache Sprache (Muster `data-einfach`):**
+- Die einfache Fassung steht fest im HTML als `data-einfach="…"` am Element; `js/app.js` tauscht den Text (`window.studioSprache.anwenden`), Texte aus `js/shop.js` bekommen das Attribut beim Erzeugen.
+- Nur an Elementen mit **reinem Text** (keine Links, Buttons oder Preise darin) – sonst würde Struktur zerstört; `app.js` überspringt solche Elemente.
+- Preise, Namen, Zahlen, „inkl. MwSt., zzgl. Versand“, Impressum und Datenschutz bleiben unverändert.
+- Schalter „Einfache Sprache“ im Kopf (`button.sprach-schalter`, `aria-pressed`, mind. 44 px, nur mit JavaScript sichtbar; am Handy eigene Zeile unter Menü und Warenkorb). Wahl erst nach Klick in `localStorage` (`studio-leerzeile-sprache` = „einfach“ oder „normal“), gilt auf allen Seiten, auch bei Neuladen und Zurück-Taste (`pageshow`); Ansage per `role="status"`.
+- Einfache Sprache: kurze Sätze, ein Gedanke je Satz, bekannte Wörter, Fachwörter erklärt, „Sie“, „Werktage“; nichts behaupten, was ein Demo-Shop nicht tut (kein Verkauf, keine Prüfung, keine Lieferung).
 
 ## Gestaltung
 - Farben mit festen Rollen:
@@ -77,8 +88,21 @@ Die Ordner `Logo` und `Bilder` bleiben im Projektordner; Pfade nicht verändern.
 - Geld immer in ganzen **Cent** rechnen (Warenwert, Versand, Gesamtsumme, MwSt.); Katalogpreise einmal mit `Math.round(preis * 100)` umwandeln, erst bei der Anzeige in Euro (de-DE, z. B. „114,80 €“). Einträge ohne vollständige Angaben (z. B. ältere Formate ohne `bestand`/`seite` oder mit `preis_brutto`) und unlesbare Einträge werden beim Lesen ohne Fehler verworfen.
 - Menge je Artikel 1 bis 10, nie über den (Demo-)Bestand; Buttons „−“/„+“ mit verständlichem `aria-label`, Tippflächen mindestens 44 px.
 - Rückmeldungen (Hinzufügen, Menge, Entfernen, Bestellung) als Statusmeldung mit `role="status"`, damit Screenreader sie vorlesen.
-- „Demo-Bestellung absenden“ zeigt nur eine Bestätigung und leert den Warenkorb – nichts wird bestellt oder bezahlt.
-- Bei `pageshow` (z. B. Zurück-Taste) Zähler und Warenkorb neu aus dem Speicher lesen.
+- Warenkorb und Kasse rechnen mit **derselben** Funktion (`summenBerechnen`) auf denselben gespeicherten Artikeln; Preise stammen aus den erzeugten Produktseiten (aus `produkte.json`).
+- Im Warenkorb führt „Als Gast zur Kasse“ (gefüllt, Terrakotta) zu `kasse.html`; erst dort gibt es „Demo-Bestellung absenden“: nur Bestätigung (ohne die Eingaben zu wiederholen), Warenkorb leeren, Zähler 0.
+- Bei `pageshow` (z. B. Zurück-Taste) Zähler, Warenkorb und Kasse neu aus dem Speicher lesen.
+
+## Kasse: nichts speichern, nichts senden
+- Kein `<form>`, kein Submit: Felder und Schaltfläche (`type="button"`) legt `js/shop.js` an; ohne JavaScript nur ein `<noscript>`-Hinweis, keine Felder.
+- Enter löst nichts aus; nichts gelangt in die URL; kein `fetch`, kein Netzwerk, keine Analytics.
+- Namen, E-Mail und Anschrift **nie** speichern – nicht im Warenkorb, nicht in `localStorage`/`sessionStorage`, nicht in Cookies. Felder ohne `name`-Attribut, mit `autocomplete="off"`; nach der Demo-Bestellung und beim Verlassen (`pagehide`) leeren, bei `pageshow` frisch mit Beispieldaten aufbauen.
+- Felder mit klar erfundenen Beispieldaten vorausgefüllt (Max Mustermann, …@example.com), sichtbare Labels, Hinweis „Demo: Bitte nur erfundene Angaben verwenden. Es wird nichts gespeichert und nichts gesendet.“
+- Prüfung im Browser; Fehler oben als Liste mit `role="alert"` (bekommt den Fokus) und am Feld als Text „Fehler: …“ mit `aria-invalid` – nie nur über Farbe. Keine Zahlungsangaben, keine Zahlungsarten.
+
+## Bedienbarkeit
+- Tippflächen mindestens 44 × 44 px für Schaltflächen, Schalter, Menü und Navigation (auch am Desktop; Navigationslinks über eine unsichtbare Fläche `::after`, damit das Aussehen bleibt). Links innerhalb von Fließtext sind ausgenommen.
+- Fokusmarkierung bei Tastaturbedienung immer sichtbar (2 px Terrakotta).
+- Kopf am Desktop: Logo · Navigation · Gruppe „Einfache Sprache“ + Warenkorb; zwischen 901 und 1380 px steht die Navigation zentriert in einer zweiten Zeile.
 - Passwörter und Schlüssel nur in `.env`, nie im Code oder im Chat.
 - Kundinnen und Kunden mit „Sie“ ansprechen; Ton warm, ruhig, hochwertig, kurz.
 
