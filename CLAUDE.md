@@ -10,7 +10,7 @@ Demo-Shop **studio.leerzeile**: kleine Papeterie (Schreibwaren, Notizbücher, Or
 - `website/produkte/<seitenname>.html` – 12 Produktseiten mit Farbwahl, **erzeugt** von `werkzeuge/produktseiten_erzeugen.js` aus `daten/import/produkte.json` (Seitenname = Slug klein, „-“ → „_“, z. B. `fuellfederhalter_signature.html`; der Slug in `produkte.json` bleibt unverändert). Nicht von Hand bearbeiten.
 - `website/warenkorb.html` – Warenkorb (nur im Browser gespeichert, keine Bestellung); Schaltfläche „Als Gast zur Kasse“
 - `website/kasse.html` – Demo-Kasse als Gast: Bestellübersicht + Beispiel-Angaben (Felder legt `js/shop.js` an), lädt kein `shopdaten.js`
-- `website/faq.html` – Fragen und Antworten (`<details>`/`<summary>`, ohne JavaScript bedienbar); Link im Fuß aller Seiten und im Service-Bereich der Startseite
+- `website/faq.html` – Fragen und Antworten (`<details>`/`<summary>`, ohne JavaScript bedienbar); Link im Fuß aller Seiten und im Service-Bereich der Startseite (dort als umrandete Schaltfläche „Fragen und Antworten“, wie „Mehr über uns“)
   (alle Seiten teilen Kopf- und Fußbereich sowie `css/style.css`, `js/app.js`, `js/shop.js`; die Produktseiten übernehmen Kopf und Fuß beim Erzeugen aus `impressum.html`.
   Änderungen an Kopf oder Fuß deshalb in allen Seiten in `website/` vornehmen und danach die Produktseiten neu erzeugen. `<body data-seite="…">` sagt shop.js, welche Seite es ist; Produktseiten haben zusätzlich `data-basis="../"`.)
 - `website/css/style.css` – Gestaltung (Farben, Schriften, Abstände, Handy-Ansicht)
@@ -44,7 +44,7 @@ Die Ordner `Logo` und `Bilder` bleiben im Projektordner; Pfade nicht verändern.
 - Die einfache Fassung steht fest im HTML als `data-einfach="…"` am Element; `js/app.js` tauscht den Text (`window.studioSprache.anwenden`), Texte aus `js/shop.js` bekommen das Attribut beim Erzeugen.
 - Nur an Elementen mit **reinem Text** (keine Links, Buttons oder Preise darin) – sonst würde Struktur zerstört; `app.js` überspringt solche Elemente.
 - Preise, Namen, Zahlen, „inkl. MwSt., zzgl. Versand“, Impressum und Datenschutz bleiben unverändert.
-- Schalter „Einfache Sprache“ im Kopf (`button.sprach-schalter`, `aria-pressed`, mind. 44 px, nur mit JavaScript sichtbar; am Handy eigene Zeile unter Menü und Warenkorb). Wahl erst nach Klick in `localStorage` (`studio-leerzeile-sprache` = „einfach“ oder „normal“), gilt auf allen Seiten, auch bei Neuladen und Zurück-Taste (`pageshow`); Ansage per `role="status"`.
+- Schalter „Einfache Sprache“ im Kopf (`button.sprach-schalter`, `aria-pressed`, mind. 44 px, nur mit JavaScript sichtbar): **leise gestaltet** – Text in Salbeigrün mit kleinem Kippschalter (Kreis links = aus, Spur gefüllt + Kreis rechts = an), kein Kasten, kein Terrakotta; am Desktop links vom Warenkorb mit feinem Trennstrich, am Handy schmale rechtsbündige Zeile unter Menü und Warenkorb. Wahl erst nach Klick in `localStorage` (`studio-leerzeile-sprache` = „einfach“ oder „normal“), gilt auf allen Seiten, auch bei Neuladen und Zurück-Taste (`pageshow`); Ansage per `role="status"`.
 - Einfache Sprache: kurze Sätze, ein Gedanke je Satz, bekannte Wörter, Fachwörter erklärt, „Sie“, „Werktage“; nichts behaupten, was ein Demo-Shop nicht tut (kein Verkauf, keine Prüfung, keine Lieferung).
 
 ## Gestaltung

@@ -110,17 +110,33 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--terrakotta);outline
 /* Kopf: Schalter "Einfache Sprache" und Warenkorb als Gruppe rechts */
 .kopf-aktionen{display:flex;align-items:center;gap:clamp(12px,1.5vw,20px);}
 .sprach-schalter{display:none;}   /* ohne JavaScript ausgeblendet – er würde dann nicht funktionieren */
+/* leiser Schalter: Text in Salbeigrün + kleiner Kippschalter, kein Kasten (Terrakotta bleibt dem Warenkorb) */
 .js .sprach-schalter{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  min-height:44px;min-width:44px;padding:0 12px;
-  background:none;border:1px solid var(--terrakotta);color:var(--terrakotta);
+  display:inline-flex;align-items:center;gap:8px;
+  min-height:44px;min-width:44px;padding:0;
+  background:none;border:0;color:var(--salbei);
   font-family:var(--sans);font-size:var(--t-label);letter-spacing:.1em;text-transform:uppercase;
-  cursor:pointer;transition:background-color .25s ease,color .25s ease;
+  cursor:pointer;
 }
-.js .sprach-schalter:hover,
-.js .sprach-schalter[aria-pressed="true"]{background:var(--terrakotta);color:var(--weiss);}
-/* eingeschaltet: zusätzlich ein Häkchen – Zustand nicht nur über Farbe */
-.js .sprach-schalter[aria-pressed="true"]::before{content:"✓";letter-spacing:0;font-size:15px;}
+.js .sprach-schalter:hover{text-decoration:underline;text-underline-offset:4px;}
+/* Kippschalter: Spur mit Kreis – aus: Kreis links, an: Spur gefüllt, Kreis rechts (Zustand über die Stellung, nicht nur Farbe) */
+.js .sprach-schalter::after{
+  content:"";flex:none;width:28px;height:16px;border-radius:9px;
+  border:1px solid var(--salbei);background-color:transparent;
+  background-image:radial-gradient(circle,var(--salbei) 4.5px,transparent 5px);
+  background-size:14px 14px;background-repeat:no-repeat;background-position:1px 50%;
+  transition:background-position .2s ease,background-color .2s ease;
+}
+.js .sprach-schalter[aria-pressed="true"]::after{
+  background-color:var(--salbei);
+  background-image:radial-gradient(circle,var(--weiss) 4.5px,transparent 5px);
+  background-position:calc(100% - 1px) 50%;
+}
+/* feiner Trennstrich zwischen Schalter und Warenkorb (Desktop) */
+.js .kopf-aktionen .warenkorb::before{
+  content:"";width:1px;height:16px;margin-right:clamp(12px,1.5vw,20px);
+  background:rgba(61,92,75,.35);
+}
 
 /* Laptop-Breiten: Navigation geordnet in eine eigene, zentrierte zweite Zeile (Platz für den Sprachschalter) */
 @media (min-width:901px){
@@ -488,7 +504,8 @@ section{padding:clamp(60px,9vw,130px) 0;}
   }
   .js .logo{grid-area:logo;justify-self:center;}
   .js .kopf-aktionen{display:contents;}
-  .js .sprach-schalter{grid-area:sprache;width:100%;}
+  .js .sprach-schalter{grid-area:sprache;justify-self:end;}
+  .js .kopf-aktionen .warenkorb::before{display:none;}   /* am Handy kein Trennstrich */
 
   .js .menue-knopf{
     grid-area:menue;justify-self:start;
